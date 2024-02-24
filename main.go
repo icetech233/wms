@@ -29,6 +29,7 @@ func main() {
 
 func ginStart() {
 	// engine.Use(Logger(), Recovery())
+	gin.SetMode(gin.ReleaseMode)
 	engine := gin.New()
 	engine.Use(gin.Logger(), gin.Recovery())
 	engine.GET("/ping", func(c *gin.Context) {
@@ -41,12 +42,10 @@ func ginStart() {
 	{
 		v1api.GET("/spuList", v1.SpuList)
 	}
-
 	engine.Run(":8081")
 }
 func initViper() {
 	v := viper.New()
-	// hw.acgzj.cn
 	v.AddRemoteProvider("consul", "127.0.0.1:8500", "wms")
 	v.SetConfigType("yaml")
 	err := v.ReadRemoteConfig()

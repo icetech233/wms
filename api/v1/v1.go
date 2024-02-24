@@ -5,7 +5,6 @@ import (
 	"wms/util"
 
 	"github.com/acmestack/gorm-plus/gplus"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +16,10 @@ func GetSpu(c *gin.Context) {
 func SpuList(c *gin.Context) {
 	// c.ShouldBindJSON()
 	spus, resultDb := gplus.SelectList[entity.Spu](nil)
-	spew.Dump(resultDb.Error, resultDb.RowsAffected)
+	if resultDb.Error != nil {
+		panic("sql err" + resultDb.Error.Error())
+	}
+	// spew.Dump(resultDb.Error, resultDb.RowsAffected)
 	spuListOut := make([]*Spu, 0, len(spus))
 	for _, spu := range spus {
 		//b, _ := json.Marshal(spu)
