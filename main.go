@@ -1,13 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"reflect"
-	"time"
+	"net/http"
+	v1 "wms/api/v1"
 
 	"github.com/acmestack/gorm-plus/gplus"
-	"github.com/davecgh/go-spew/spew"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -16,66 +15,58 @@ import (
 	_ "github.com/spf13/viper/remote"
 )
 
+var mysql_dsn string
 var err error
 var gormDb *gorm.DB
 
 func main() {
 
 	initViper()
-	return
 	initDb()
 
-	// 	viper.SetConfigType("json") // Need to explicitly set this to json
-	// err := viper.ReadRemoteConfig()
-	// fmt.Println(viper.Get("port")) // 8080
-	// fmt.Println(viper.Get("hostname")) // myhostname.com
+	ginStart()
 }
 
+func ginStart() {
+	// engine.Use(Logger(), Recovery())
+	engine := gin.New()
+	engine.Use(gin.Logger(), gin.Recovery())
+	engine.GET("/ping", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "pong",
+		})
+	})
+
+	v1api := engine.Group("/api/v1")
+	{
+		v1api.GET("/spuList", v1.SpuList)
+	}
+
+	engine.Run(":8081")
+}
 func initViper() {
 	v := viper.New()
-	v.AddRemoteProvider("consul", "hw.acgzj.cn:8500", "wms")
+	// hw.acgzj.cn
+	v.AddRemoteProvider("consul", "127.0.0.1:8500", "wms")
 	v.SetConfigType("yaml")
 	err := v.ReadRemoteConfig()
-
 	fmt.Println("viper err", err)
-	s1 := v.GetString("dns")
-
-	fmt.Println("s1,", s1)
+	// 读取配置
+	mysql_dsn = v.GetString("sql.dsn")
+	fmt.Println(v.AllKeys(), "=", mysql_dsn)
 }
 
-func main2() {
-
-	t1 := time.Now()
-	tof := reflect.TypeOf(t1)
-	vof := reflect.ValueOf(t1)
-	tof = vof.Type()
-	fmt.Println(tof.Name(), tof.Kind())
-	tof.Elem()
-
-	t2, _ := vof.Interface().(time.Time)
-	fmt.Println(t2)
-	return
-
-	spus, resultDb := gplus.SelectList[Spu](nil)
-	spew.Dump(resultDb.Error, resultDb.RowsAffected)
-	for _, spu := range spus {
-		b, _ := json.Marshal(spu)
-		fmt.Println("spu:", string(b))
-	}
-}
-
-func spuInsert() {
-	// spu := Spu{SpuCode: "IIG1000E", SpuDesc: "IIG1000E系列"}
-	spu := Spu{SpuCode: "IIG3000", SpuDesc: "IIG3000系列"}
-	resultDb := gplus.Insert[Spu](&spu)
-	spew.Dump(resultDb.Error, resultDb.RowsAffected)
-	fmt.Println("spu id:", spu.SpuID)
-}
+// func spuInsert() {
+// 	// spu := Spu{SpuCode: "IIG1000E", SpuDesc: "IIG1000E系列"}
+// 	spu := Spu{SpuCode: "IIG3000", SpuDesc: "IIG3000系列"}
+// 	resultDb := gplus.Insert[Spu](&spu)
+// 	spew.Dump(resultDb.Error, resultDb.RowsAffected)
+// 	fmt.Println("spu id:", spu.SpuID)
+// }
 
 func initDb() {
-	dsn := "root:271823981@tcp(hw.acgzj.cn:3306)/wms?charset=utf8mb4&parseTime=True&loc=Local"
 	gormDb, err = gorm.Open(mysql.New(mysql.Config{
-		DSN:                       dsn,
+		DSN:                       mysql_dsn,
 		DisableDatetimePrecision:  true,
 		SkipInitializeWithVersion: false,
 	}), &gorm.Config{

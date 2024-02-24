@@ -1,0 +1,21 @@
+
+func main2() {
+
+	t1 := time.Now()
+	tof := reflect.TypeOf(t1)
+	vof := reflect.ValueOf(t1)
+	tof = vof.Type()
+	fmt.Println(tof.Name(), tof.Kind())
+	tof.Elem()
+
+	t2, _ := vof.Interface().(time.Time)
+	fmt.Println(t2)
+	return
+
+	spus, resultDb := gplus.SelectList[Spu](nil)
+	spew.Dump(resultDb.Error, resultDb.RowsAffected)
+	for _, spu := range spus {
+		b, _ := json.Marshal(spu)
+		fmt.Println("spu:", string(b))
+	}
+}
