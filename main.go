@@ -49,10 +49,12 @@ func initViper() {
 	v.AddRemoteProvider("consul", "127.0.0.1:8500", "wms")
 	v.SetConfigType("yaml")
 	err := v.ReadRemoteConfig()
+	if err != nil {
+		panic("viper err" + err.Error())
+	}
 	fmt.Println("viper err", err)
 	// 读取配置
 	mysql_dsn = v.GetString("sql.dsn")
-	fmt.Println(v.AllKeys(), "=", mysql_dsn)
 }
 
 // func spuInsert() {
