@@ -52,7 +52,6 @@ func initViper() {
 	if err != nil {
 		panic("viper err" + err.Error())
 	}
-	fmt.Println("viper err", err)
 	// 读取配置
 	mysql_dsn = v.GetString("sql.dsn")
 }
