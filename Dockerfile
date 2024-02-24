@@ -10,12 +10,12 @@ RUN cat ./configs/config.yaml
 
 RUN go env
 RUN go mod tidy
-RUN go build -ldflags "-s -w" .
+RUN go build -trimpath -ldflags "-s -w -buildid=" .
 
 FROM alpine:latest
 LABEL MAINTAINER="dsg@qq.com"
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/repo.huaweicloud.com/g' /etc/apk/repositories
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN apk add --no-cache gettext tzdata && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
