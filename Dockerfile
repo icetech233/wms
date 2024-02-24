@@ -6,10 +6,7 @@ ENV GOPROXY=https://repo.huaweicloud.com/repository/goproxy/,direct
 WORKDIR /server
 COPY . .
 
-RUN cat ./configs/config.yaml
-
 RUN go env
-RUN go mod tidy
 RUN go build -trimpath -ldflags "-s -w -buildid=" .
 
 FROM alpine:latest
@@ -25,6 +22,5 @@ RUN apk add --no-cache gettext tzdata && \
 
 WORKDIR /server
 COPY --from=0 /server/wms ./
-COPY --from=0 /server/configs/config.yaml ./
 
 ENTRYPOINT ["./wms"]
