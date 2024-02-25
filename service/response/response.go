@@ -11,8 +11,8 @@ import (
 type Response struct {
 	Code  int32  `json:"code"`
 	Msg   string `json:"msg"`
-	Data  any    `json:"data,omitempty"`
 	Debug any    `json:"debug,omitempty"`
+	Data  any    `json:"data,omitempty"`
 }
 
 func Ok(c *gin.Context) {
@@ -38,10 +38,13 @@ func Result(code int32, msg string, data interface{}, debug any, c *gin.Context)
 	// isProtobuf = strings.Contains(contentType, "application/x-protobuf")
 	// c.GetRawData()
 	if debug == nil {
+		m := make(map[string]any)
 		if c.Request.Method == http.MethodGet {
-			debug = c.Request.URL.Query()
+			m["query"] = c.Request.URL.Query()
+			debug = m
 		}
 		if c.Request.Method == http.MethodPost {
+			//m["post_form"] = c.Request.PostForm
 			debug, _ = c.GetRawData()
 		}
 	}
@@ -49,8 +52,8 @@ func Result(code int32, msg string, data interface{}, debug any, c *gin.Context)
 	c.JSON(http.StatusOK, Response{
 		code,
 		msg,
-		data,
 		debug,
+		data,
 	})
 	// return
 
