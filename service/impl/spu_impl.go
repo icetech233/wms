@@ -35,9 +35,19 @@ func (s *SpuService) List(ctx context.Context, arg any) []*model.Spu {
 }
 
 func (s *SpuService) Add(ctx context.Context, arg *request.AddSpuRequest) error {
-	spu := new(entity.Spu)
+	// spu := new(entity.Spu)
+	// util.CopyStruct(spu, arg)
+
+	query, u := gplus.NewQuery[entity.Spu]()
+	query.Eq(&u.SpuCode, arg.SpuCode)
+	spu, resultDb := gplus.SelectOne(query)
+	if resultDb.RowsAffected > 0 {
+		return errors.New("编码:" + arg.SpuCode + "已存在")
+	}
+	spu = new(entity.Spu)
 	util.CopyStruct(spu, arg)
-	resultDb := gplus.Insert(&spu)
+	//
+	resultDb = gplus.Insert(&spu)
 	if resultDb.Error != nil {
 		return errors.New("Insert spu err:" + resultDb.Error.Error())
 	}
