@@ -25,8 +25,12 @@ func OkWithData(data interface{}, c *gin.Context) {
 }
 
 func Fail(code int32, message string, debug any, c *gin.Context) {
-	Result(code, message, nil, debug, c)
-	c.Status(http.StatusBadRequest)
+	c.JSON(http.StatusBadRequest, Response{
+		code,
+		message,
+		debug,
+		nil,
+	})
 	c.Abort()
 }
 
