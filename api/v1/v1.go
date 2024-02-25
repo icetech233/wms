@@ -22,7 +22,7 @@ func (a *spuApi) SpuAdd(c *gin.Context) {
 	c.ShouldBindJSON(parm)
 	err := service.SpuSrv.Add(c, parm)
 	if err != nil {
-		panic(err)
+		response.Fail(-1, err.Error(), parm, c)
 	}
 	response.Ok(c)
 }

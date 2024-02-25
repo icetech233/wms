@@ -26,6 +26,7 @@ func OkWithData(data interface{}, c *gin.Context) {
 
 func Fail(code int32, message string, debug any, c *gin.Context) {
 	Result(code, message, nil, debug, c)
+	c.Status(http.StatusBadRequest)
 }
 
 func Result(code int32, msg string, data interface{}, debug any, c *gin.Context) {
@@ -43,10 +44,10 @@ func Result(code int32, msg string, data interface{}, debug any, c *gin.Context)
 			m["query"] = c.Request.URL.Query()
 			debug = m
 		}
-		if c.Request.Method == http.MethodPost {
-			//m["post_form"] = c.Request.PostForm
-			debug, _ = c.GetRawData()
-		}
+		// if c.Request.Method == http.MethodPost {
+		// 	//m["post_form"] = c.Request.PostForm
+		// 	debug, _ = c.GetRawData()
+		// }
 	}
 
 	c.JSON(http.StatusOK, Response{
