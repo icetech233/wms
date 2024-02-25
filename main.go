@@ -41,7 +41,7 @@ func ginStart() {
 	v1api := engine.Group("/api/v1")
 	{
 		v1api.GET("/spu/list", v1.SpuV1.SpuList)
-
+		v1api.POST("/spu/add", v1.SpuV1.SpuAdd)
 	}
 	engine.Run(":8081")
 }

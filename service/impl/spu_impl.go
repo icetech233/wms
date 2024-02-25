@@ -2,8 +2,11 @@ package impl
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"wms/entity"
 	"wms/service/model"
+	"wms/service/request"
 	"wms/util"
 
 	"github.com/acmestack/gorm-plus/gplus"
@@ -29,4 +32,15 @@ func (s *SpuService) List(ctx context.Context, arg any) []*model.Spu {
 	}
 
 	return spuListOut
+}
+
+func (s *SpuService) Add(ctx context.Context, arg *request.AddSpuRequest) error {
+	spu := new(entity.Spu)
+	util.CopyStruct(spu, arg)
+	resultDb := gplus.Insert(&spu)
+	if resultDb.Error != nil {
+		return errors.New("Insert spu err:" + resultDb.Error.Error())
+	}
+	fmt.Println("spu id:", spu.SpuID)
+	return nil
 }
