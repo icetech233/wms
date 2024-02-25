@@ -23,6 +23,7 @@ func (a *spuApi) SpuAdd(c *gin.Context) {
 	err := service.SpuSrv.Add(c, parm)
 	if err != nil {
 		response.Fail(-1, err.Error(), parm, c)
+		return
 	}
 	response.Ok(c)
 }
