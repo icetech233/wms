@@ -10,7 +10,6 @@ import (
 
 func GetSpu(c *gin.Context) {
 	// c.ShouldBindJSON()
-
 }
 
 func SpuList(c *gin.Context) {
@@ -22,11 +21,9 @@ func SpuList(c *gin.Context) {
 	// spew.Dump(resultDb.Error, resultDb.RowsAffected)
 	spuListOut := make([]*Spu, 0, len(spus))
 	for _, spu := range spus {
-		//b, _ := json.Marshal(spu)
 		_s := new(Spu)
 		util.CopyStruct(_s, spu)
 		spuListOut = append(spuListOut, _s)
-		//fmt.Println("spu:", string(b))
 	}
 
 	c.JSON(200, spuListOut)
