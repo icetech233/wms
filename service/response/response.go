@@ -39,7 +39,7 @@ func Result(code int32, msg string, data interface{}, debug any, c *gin.Context)
 	// c.GetRawData()
 	if debug == nil {
 		if c.Request.Method == http.MethodGet {
-			debug = c.Params
+			debug = c.Request.URL.Query()
 		}
 		if c.Request.Method == http.MethodPost {
 			debug, _ = c.GetRawData()
