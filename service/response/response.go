@@ -27,6 +27,7 @@ func OkWithData(data interface{}, c *gin.Context) {
 func Fail(code int32, message string, debug any, c *gin.Context) {
 	Result(code, message, nil, debug, c)
 	c.Status(http.StatusBadRequest)
+	c.Abort()
 }
 
 func Result(code int32, msg string, data interface{}, debug any, c *gin.Context) {
