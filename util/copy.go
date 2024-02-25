@@ -31,6 +31,9 @@ func CopyStruct(dst, src any) error {
 		// get dst field by name
 		dfv := dv.FieldByName(f.Name)
 
+		if !dfv.IsValid() {
+			continue
+		}
 		err := copyVal(dfv, sfv)
 		if err != nil {
 			fmt.Println(err, "***", f, "***")

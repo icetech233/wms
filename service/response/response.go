@@ -37,8 +37,13 @@ func Result(code int32, msg string, data interface{}, debug any, c *gin.Context)
 	// isJson = strings.Contains(contentType, "application/json")
 	// isProtobuf = strings.Contains(contentType, "application/x-protobuf")
 	// c.GetRawData()
-	if debug == nil && c.Request.Method == http.MethodPost {
-		debug, _ = c.GetRawData()
+	if debug == nil {
+		if c.Request.Method == http.MethodGet {
+			debug = c.Params
+		}
+		if c.Request.Method == http.MethodPost {
+			debug, _ = c.GetRawData()
+		}
 	}
 
 	c.JSON(http.StatusOK, Response{

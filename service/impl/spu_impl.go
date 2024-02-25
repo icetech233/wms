@@ -12,9 +12,8 @@ import (
 type SpuService struct {
 }
 
-var SpuSrv SpuService
+var SpuSrvImpl SpuService
 
-// args pb.UnlockBanArgs, reply *pb.UnlockBanReply) error {
 func (s *SpuService) List(ctx context.Context, arg any) []*model.Spu {
 
 	spus, resultDb := gplus.SelectList[entity.Spu](nil)
