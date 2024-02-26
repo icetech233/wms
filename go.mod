@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/acmestack/gorm-plus v0.1.5
 	github.com/gin-gonic/gin v1.9.1
-	github.com/hashicorp/consul/api v1.25.1
+	github.com/hashicorp/consul/api v1.27.0
 	github.com/spf13/viper v1.18.2
 	gorm.io/driver/mysql v1.5.4
 	gorm.io/gorm v1.25.7
@@ -24,9 +24,11 @@ require (
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
+	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.5.0 // indirect
 	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
+	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
