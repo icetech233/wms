@@ -4,15 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	v1 "wms/api/v1"
+	"wms/internal"
 
 	"github.com/acmestack/gorm-plus/gplus"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-
-	_ "github.com/spf13/viper/remote"
 )
 
 var mysql_dsn string
@@ -46,24 +44,10 @@ func ginStart() {
 	engine.Run(":8081")
 }
 func initViper() {
-	v := viper.New()
-	v.AddRemoteProvider("consul", "127.0.0.1:8500", "wms")
-	v.SetConfigType("yaml")
-	err := v.ReadRemoteConfig()
-	if err != nil {
-		panic("viper err" + err.Error())
-	}
+	v := internal.InitViper()
 	// 读取配置
 	mysql_dsn = v.GetString("sql.dsn")
 }
-
-// func spuInsert() {
-// 	// spu := Spu{SpuCode: "IIG1000E", SpuDesc: "IIG1000E系列"}
-// 	spu := Spu{SpuCode: "IIG3000", SpuDesc: "IIG3000系列"}
-// 	resultDb := gplus.Insert[Spu](&spu)
-// 	spew.Dump(resultDb.Error, resultDb.RowsAffected)
-// 	fmt.Println("spu id:", spu.SpuID)
-// }
 
 func initDb() {
 	gormDb, err = gorm.Open(mysql.New(mysql.Config{
