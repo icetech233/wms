@@ -37,9 +37,6 @@
 
         string requestUri = "/data/menu.json?" + Random.Shared.Next(int.MaxValue);
         _menuData = await hc.GetFromJsonAsync<MenuDataItem[]>(requestUri);
-
-        Object ss1 = await hc.GetFromJsonAsync<Object>("http://hw.acgzj.cn:8081/api/v1/spu/list");
-        Console.WriteLine(ss1);
     }
 
     public LinkItem[] Links { get; init; } =

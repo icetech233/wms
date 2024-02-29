@@ -1,16 +1,43 @@
 ﻿@namespace MyAntDesignApp2.Pages.Settings
 @page "/settings/attrs"
 
-<h3>setting attr </h3>
+
+@using MyAntDesignApp2.Models
 
 <GridContent Id="#main">
-    <h3>@_selectKey</h3>
 
+    <Alert Message=@_attrPageKey Type="success"
+           ShowIcon="true" Banner
+           Style="margin: -12px; margin-bottom: 24px" />
+
+    <Table TItem="Attr" DataSource="@attrList" HidePagination>
+        <Column Title="ID" @bind-Field="@context.AttrID" />
+        <Column Title="属性名称" @bind-Field="@context.AttrName" />
+
+        <PropertyColumn Property="c=>c.CreatedAt" Sortable />
+        <PropertyColumn Property="c=>c.UpdatedAt" Sortable></PropertyColumn>
+
+        <ActionColumn Title="Action">
+            <Space>
+                <SpaceItem>
+                    <Button OnClick="()=>Delete(context.AttrID)">详情</Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button Danger Icon="@IconType.Fill.Delete" Type="@ButtonType.Primary"
+                    OnClick="()=>Delete(context.AttrID)"></Button>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+
+    </Table>
 </GridContent>
 
-@code{
+@code {
+    private void Delete(long id)
+    {
+        //   forecasts = forecasts.Where(x => x.Id != id).ToArray();
+        //   _total = forecasts.Length;
+    }
 
-
-    // private string _selectKey = "base";
 
 }
