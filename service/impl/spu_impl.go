@@ -49,7 +49,7 @@ func (s *SpuService) Add(ctx context.Context, arg *request.AddSpuRequest) error 
 	//
 	resultDb = gplus.Insert(&spu)
 	if resultDb.Error != nil {
-		return errors.New("Insert spu err:" + resultDb.Error.Error())
+		return errors.New("insert spu err:" + resultDb.Error.Error())
 	}
 	fmt.Println("spu id:", spu.SpuID)
 	return nil

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	v1 "wms/api/v1"
 	"wms/internal"
+	"wms/middleware"
 
 	"github.com/acmestack/gorm-plus/gplus"
 	"github.com/gin-gonic/gin"
@@ -30,6 +31,9 @@ func ginStart() {
 	gin.SetMode(gin.ReleaseMode)
 	engine := gin.New()
 	engine.Use(gin.Logger(), gin.Recovery())
+	engine.Use(middleware.Cors())
+	// engine.Use(cors.Default())
+
 	engine.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
