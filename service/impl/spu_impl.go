@@ -12,12 +12,16 @@ import (
 	"github.com/acmestack/gorm-plus/gplus"
 )
 
-type SpuService struct {
+type spuService struct {
 }
 
-var SpuSrvImpl SpuService
+func NewSpuService() *spuService {
+	return new(spuService)
+}
 
-func (s *SpuService) List(ctx context.Context, arg any) []*model.Spu {
+var SpuSrvImpl spuService
+
+func (s *spuService) List(ctx context.Context, arg any) []*model.Spu {
 
 	spus, resultDb := gplus.SelectList[entity.Spu](nil)
 	if resultDb.Error != nil {
@@ -34,7 +38,7 @@ func (s *SpuService) List(ctx context.Context, arg any) []*model.Spu {
 	return spuListOut
 }
 
-func (s *SpuService) Add(ctx context.Context, arg *request.AddSpuRequest) error {
+func (s *spuService) Add(ctx context.Context, arg *request.AddSpuRequest) error {
 	// spu := new(entity.Spu)
 	// util.CopyStruct(spu, arg)
 

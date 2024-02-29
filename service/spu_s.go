@@ -7,7 +7,7 @@ import (
 	"wms/service/request"
 )
 
-var SpuSrv ISpuService = &impl.SpuService{}
+var SpuSrv ISpuService = impl.NewSpuService()
 
 type ISpuService interface {
 	List(ctx context.Context, arg any) []*model.Spu

@@ -41,8 +41,14 @@ func ginStart() {
 
 	v1api := engine.Group("/api/v1")
 	{
-		v1api.GET("/spu/list", v1.SpuV1.SpuList)
-		v1api.POST("/spu/add", v1.SpuV1.SpuAdd)
+		//
+		g_spu := v1api.Group("/spu")
+		g_spu.GET("/list", v1.SpuV1.SpuList)
+		g_spu.POST("/add", v1.SpuV1.SpuAdd)
+		//
+		g_attr := v1api.Group("/attr")
+		g_attr.GET("/list", v1.AttrV1.AttrList)
+		g_attr.POST("/add", v1.AttrV1.AttrAdd)
 	}
 	engine.Run(":8081")
 }
