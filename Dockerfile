@@ -7,7 +7,8 @@ WORKDIR /server
 COPY . .
 
 RUN go env
-RUN go build -trimpath -ldflags "-s -w -buildid=" .
+#RUN go build -trimpath -ldflags "-s -w -buildid=" .
+RUN go build -v .
 
 FROM alpine:latest
 LABEL MAINTAINER="dsg@qq.com"

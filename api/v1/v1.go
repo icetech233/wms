@@ -12,6 +12,10 @@ type spuApi struct{}
 
 var SpuV1 spuApi
 
+type attrApi struct{}
+
+var AttrV1 attrApi
+
 func (a *spuApi) SpuList(c *gin.Context) {
 	spuListOut := service.SpuSrv.List(c, nil)
 	response.OkWithData(spuListOut, c)
