@@ -1,0 +1,13 @@
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <CascadingValue Value="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" />
+        </CascadingValue>
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(BasicLayout)">
+            <p>对不起, 这个地址什么都没有</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+<AntContainer />

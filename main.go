@@ -33,7 +33,6 @@ func ginStart() {
 	engine.Use(gin.Logger(), gin.Recovery())
 	engine.Use(middleware.Cors())
 	// engine.Use(cors.Default())
-
 	engine.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",

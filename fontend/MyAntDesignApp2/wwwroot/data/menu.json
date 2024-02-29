@@ -1,0 +1,28 @@
+[
+  {
+    "path": "/",
+    "name": "欢迎",
+    "key": "welcome",
+    "icon": "smile"
+  },
+  {
+    "path": "/setting",
+    "name": "设置",
+    "key": "setting",
+    "icon": "setting",
+    "children": [
+      {
+        "path": "/settings/attrs",
+        "name": "规格管理",
+        "icon": "appstore",
+        "key": "setting.attrs"
+      },
+      {
+        "path": "/settings/series",
+        "name": "系列管理",
+        "icon": "appstore",
+        "key": "setting.series"
+      }
+    ]
+  }
+]

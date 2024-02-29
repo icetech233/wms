@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33318.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyAntDesignApp2", "MyAntDesignApp2.csproj", "{8AF52FC4-FF69-4410-AC09-72610B5827EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AF52FC4-FF69-4410-AC09-72610B5827EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AF52FC4-FF69-4410-AC09-72610B5827EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AF52FC4-FF69-4410-AC09-72610B5827EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AF52FC4-FF69-4410-AC09-72610B5827EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25D6695E-82ED-4D42-9796-D70B725CDEDF}
+	EndGlobalSection
+EndGlobal
