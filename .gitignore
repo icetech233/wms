@@ -2,6 +2,7 @@
 
 /configs
 
-
 bin
 obj
+
+*.csproj.user
