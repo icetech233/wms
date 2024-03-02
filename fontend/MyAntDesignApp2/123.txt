@@ -1,0 +1,87 @@
+﻿using System;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using MyAntDesignApp.Models;
+
+namespace MyAntDesignApp.Services
+{
+    public interface IUserService
+    {
+        Task<CurrentUser> GetCurrentUserAsync();
+    }
+
+    public class UserService : IUserService
+    {
+        private readonly HttpClient _httpClient;
+
+        public UserService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
+        public async Task<CurrentUser> GetCurrentUserAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<CurrentUser>("data/current_user.json?" + new Random().NextInt64(Int64.MaxValue));
+        }
+    }
+}
+
+
+        private CurrentUser _currentUser = new CurrentUser();
+
+        [Inject] protected IUserService UserService { get; set; }
+
+        private void HandleFinish()
+        {
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+            _currentUser = await UserService.GetCurrentUserAsync();
+        }
+
+
+  <PropertyColumn Title="Hot" Property="c=>c.Hot">
+    <Switch @bind-Value="@context.Hot"></Switch>
+  </PropertyColumn>
+
+  <ActionColumn Title="Action">
+    <Space>
+      <SpaceItem><Button Danger OnClick="()=>Delete(context.Id)">Delete</Button></SpaceItem>
+    </Space>
+  </ActionColumn>
+
+
+  private void Delete(int id)
+  {
+    forecasts = forecasts.Where(x => x.Id != id).ToArray();
+    _total = forecasts.Length;
+  }
+
+
+    <ActionColumn Title="Action">
+        <Space Size=@("middle")>
+            <SpaceItem>
+                <a>Invite @context.Name</a>
+            </SpaceItem>
+            <SpaceItem>
+                <a>Delete</a>
+            </SpaceItem>
+        </Space>
+    </ActionColumn>
+
+  <ActionColumn Title="Action">
+    <Space Size=@("middle")>
+      <SpaceItem>
+        <a>Invite @context.Name</a>
+      </SpaceItem>
+      <SpaceItem>
+        <a>Delete</a>
+      </SpaceItem>
+    </Space>
+  </ActionColumn>
+
+
+
