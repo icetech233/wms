@@ -1,7 +1,10 @@
 *.exe
 
-/configs
+.vs
 
+/configs
 
 bin
 obj
+
+*.csproj.user

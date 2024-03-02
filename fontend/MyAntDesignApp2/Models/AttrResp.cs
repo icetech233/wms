@@ -1,5 +1,15 @@
 ﻿namespace MyAntDesignApp2.Models
 {
-    public record class BaseResp(int Code, string Msg, object Debug, object Data);
-    public record class AttrResp(int Code, string Msg, object Debug, Attr[] Data);
+    public class AttrResp : BaseResp
+    {
+        public object Debug { get; set; }
+        public Attr[] Data { get; set; }
+    }
+
+    public class BaseResp
+    {
+        public int Code { get; init; }
+        public string Msg { get; init; }
+    }
+
 }
