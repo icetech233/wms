@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"wms/entity"
 	"wms/service/model"
 	"wms/service/request"
@@ -37,6 +38,9 @@ func (s *menuService) List(ctx context.Context, arg any) []*model.Menu {
 }
 
 func (s *menuService) Add(ctx context.Context, arg *request.AddMenuRequest) error {
+	if len(strings.TrimSpace(arg.Key)) == 0 {
+		return errors.New("缺少参数key")
+	}
 	query, u := gplus.NewQuery[entity.Menu]()
 	query.Eq(&u.Key, arg.Key)
 	menu, resultDb := gplus.SelectOne(query)
