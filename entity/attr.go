@@ -3,11 +3,11 @@ package entity
 import "time"
 
 type Attr struct {
-	AttrID    int64     `gorm:"primaryKey;column:attr_id;type:bigint;not null" json:"-"`
-	AttrName  string    `gorm:"column:attr_name;type:varchar(128)" json:"attrName"` // 属性名称
-	ShowType  int       `gorm:"column:show_type;type:int" json:"showType"`          // 1 单选, 2 布尔, 3 多选
-	CreatedAt time.Time `gorm:"column:created_at;type:datetime" json:"createdAt"`
-	UpdatedAt time.Time `gorm:"column:updated_at;type:datetime" json:"updatedAt"`
+	AttrID    int64     `gorm:"primaryKey;column:attr_id;type:bigint;not null"`
+	AttrName  string    `gorm:"column:attr_name;type:varchar(128)"` // 属性名称
+	ShowType  int       `gorm:"column:show_type;type:int"`          // 1 单选, 2 布尔, 3 多选
+	CreatedAt time.Time `gorm:"column:created_at;type:datetime"`
+	UpdatedAt time.Time `gorm:"column:updated_at;type:datetime"`
 }
 
 // TableName get sql table name.获取数据库表名
