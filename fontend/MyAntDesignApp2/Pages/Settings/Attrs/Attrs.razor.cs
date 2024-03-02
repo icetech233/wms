@@ -29,13 +29,19 @@ namespace MyAntDesignApp2.Pages.Settings
             var resp = await hc.GetFromJsonAsync<AttrResp>(requestUri);
 
             Console.WriteLine(resp);
-            if (resp.Code!= 200){
+            if (resp.Code != 200)
+            {
                 // 弹窗 resp.Msg;
                 return;
             }
 
             attrList = resp.Data;
 
+            requestUri = "http://hw.acgzj.cn:8081" +
+"/api/v1/menu/list?s" + +Random.Shared.Next(int.MaxValue);
+            var resp2 = await hc.GetFromJsonAsync<MenuResp>(requestUri);
+
+            Console.WriteLine(resp2);
 
         }
     }
