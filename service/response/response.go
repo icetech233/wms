@@ -25,7 +25,7 @@ func OkWithData(data interface{}, c *gin.Context) {
 }
 
 func Fail(code int32, message string, debug any, c *gin.Context) {
-	c.JSON(http.StatusBadRequest, Response{
+	c.JSON(http.StatusInternalServerError, Response{
 		code,
 		message,
 		debug,
