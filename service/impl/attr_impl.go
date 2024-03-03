@@ -22,12 +22,35 @@ func (s *AttrService) List(ctx context.Context, arg any) []*model.Attr {
 	if resultDb.Error != nil {
 		panic("sql err" + resultDb.Error.Error())
 	}
+
+	attrids := make([]int64, len(attrs))
+	for i, item := range attrs {
+		attrids[i] = item.AttrID
+	}
+
+	avMap := make(map[int64][]*model.AttrValue)
+	// 查询子表
+	query, av := gplus.NewQuery[entity.AttrValue]()
+	query.In(&av.AttrID, attrids)
+	attrvals, _ := gplus.SelectList[entity.AttrValue](nil)
+
+	for _, attrval := range attrvals {
+		vlist, e1 := avMap[attrval.AttrID]
+		if !e1 {
+			vlist = make([]*model.AttrValue, 0)
+		}
+		_m := new(model.AttrValue)
+		util.CopyStruct(_m, attrval)
+		vlist = append(vlist, _m)
+		avMap[attrval.AttrID] = vlist
+	}
+
 	attrListOut := make([]*model.Attr, 0, len(attrs))
 	for _, attr := range attrs {
 		_s := new(model.Attr)
 		util.CopyStruct(_s, attr)
-
-		//
+		// 补充对应数据
+		_s.Val = avMap[attr.AttrID]
 		attrListOut = append(attrListOut, _s)
 	}
 
