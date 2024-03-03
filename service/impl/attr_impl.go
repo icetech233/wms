@@ -32,7 +32,7 @@ func (s *AttrService) List(ctx context.Context, arg any) []*model.Attr {
 	// 查询子表
 	query, av := gplus.NewQuery[entity.AttrValue]()
 	query.In(&av.AttrID, attrids)
-	attrvals, _ := gplus.SelectList[entity.AttrValue](nil)
+	attrvals, _ := gplus.SelectList[entity.AttrValue](query)
 
 	for _, attrval := range attrvals {
 		vlist, e1 := avMap[attrval.AttrID]
