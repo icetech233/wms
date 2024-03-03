@@ -29,17 +29,16 @@
         <Column Title="属性ID" @bind-Field="@context.AttrID" />
         <Column Title="属性名称" @bind-Field="@context.AttrName" />
 
-@*         <PropertyColumn Property="c=>c.Tags">
-            @foreach (var tag in context.Tags)
+        <PropertyColumn Property="c=>c.Val">
+            @foreach (var tag in context.Val)
             {
-                var color = tag.Length > 5 ? "geekblue" : "green";
-                if (tag == "loser")
-                {
-                    color = "volcano";
-                }
-                <Tag Color="@color">@tag</Tag>
+                PresetColor c1= (PresetColor)Random.Shared.Next(13);
+                var color = c1.ToString();
+                // color = "#3b5999";
+                <Tag Color="@color">@tag.AttrValueName</Tag>
             }
-        </PropertyColumn> *@
+        </PropertyColumn> 
+
 
         <PropertyColumn Property="c=>c.CreatedAt" Sortable />
         <PropertyColumn Property="c=>c.UpdatedAt" Sortable></PropertyColumn>

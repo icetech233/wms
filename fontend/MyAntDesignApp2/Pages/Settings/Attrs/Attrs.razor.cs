@@ -73,7 +73,7 @@ namespace MyAntDesignApp2.Pages.Settings
         private async void Refresh()
         {
             string requestUri = "http://hw.acgzj.cn:8081" +
-"/api/v1/attr/list?s" + +Random.Shared.Next(int.MaxValue);
+"/api/v1/attr/list?s" + Random.Shared.Next(int.MaxValue);
             var resp = hc.GetFromJsonAsync<AttrResp>(requestUri).Result;
 
             Console.Out.WriteLine(JsonSerializer.Serialize(resp));

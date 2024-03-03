@@ -7,23 +7,14 @@ namespace MyAntDesignApp2.Models
         public long AttrID { get; set; }
         public string AttrName { get; set; }
         public int ShowType { get; set; }
+        [DisplayName("值")]
+        public AttrValue[] Val { get; set; }
     }
 
-    public class Menu : CommonDate
+    public class AttrValue : CommonDate
     {
-        public long MenuID { get; set; }
-        public long parentID { get; set; }
-        public string Key { get; set; }
-        public string Name { get; set; }
-        public string Icon { get; set; }
-        public string Path { get; set; }
-    }
-
-
-    public class CommonDate {
-        [DisplayName("创建")]
-        public string CreatedAt { get; set; }
-        [DisplayName("修改")]
-        public string UpdatedAt { get; set; }
+        public long AttrValueID { get; set; }
+        [DisplayName("名称")]
+        public object AttrValueName { get; set; }
     }
 }
