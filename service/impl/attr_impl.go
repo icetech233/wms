@@ -26,6 +26,8 @@ func (s *AttrService) List(ctx context.Context, arg any) []*model.Attr {
 	for _, attr := range attrs {
 		_s := new(model.Attr)
 		util.CopyStruct(_s, attr)
+
+		//
 		attrListOut = append(attrListOut, _s)
 	}
 
