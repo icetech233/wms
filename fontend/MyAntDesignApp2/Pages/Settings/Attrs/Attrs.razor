@@ -40,35 +40,49 @@
                     // color = "#3b5999";
                     <Tag Color="@color">@tag.AttrValueName</Tag>
                 }
-            } else
+            }
+            else
             {
                 <Tag Color="red-inverse">@("无")</Tag>
             }
-        </PropertyColumn> 
+        </PropertyColumn>
 
 
         <PropertyColumn Property="c=>c.CreatedAt" Sortable />
-        <PropertyColumn Property="c=>c.UpdatedAt" Sortable></PropertyColumn>
+         <PropertyColumn Property="c=>c.UpdatedAt" Sortable></PropertyColumn>
 
-        <ActionColumn Title="操作">
-            <Space>
-                <SpaceItem>
-                    <Button OnClick="()=>Delete(context.AttrID)">编辑</Button>
-                </SpaceItem>
-                <SpaceItem>
-                    <Button Danger Icon="@IconType.Fill.Delete" 
-                    Type="@ButtonType.Primary"
-                    OnClick="()=>Delete(context.AttrID)" />
-                </SpaceItem>
-            </Space>
-        </ActionColumn>
+         <ActionColumn Title="操作">
+             <Space>
+                 <SpaceItem>
+                     <Button OnClick="()=>Delete(context.AttrID)">编辑</Button>
+                 </SpaceItem>
+                 <SpaceItem>
+                     <Button Danger Icon="@IconType.Fill.Delete"
+                             Type="@ButtonType.Primary"
+                             OnClick="()=>Delete(context.AttrID)" />
+                 </SpaceItem>
+             </Space>
+         </ActionColumn>
 
-    </Table>
-</GridContent>
+     </Table>
+ </GridContent>
 
-@code {
+ <Modal Title=@modalTitle Keyboard=false MaskClosable=false Closable=false
+        @bind-Visible="@_visible">
+
+        <a>shujuneirong </a>
+@*         <Form LabelColSpan="8" Wra>
+            <FormItem>
+
+            </FormItem>
+        </Form> *@
+
+ </Modal>
+
+ @code {
+    string modalTitle = "添加规格"; // 编辑规格
     string size = "middle";
-
+    bool _visible = true;
 
     private void Delete(long id)
     {
@@ -80,6 +94,5 @@
         //   forecasts = forecasts.Where(x => x.Id != id).ToArray();
         //   _total = forecasts.Length;
     }
-
 
 }

@@ -17,9 +17,7 @@ namespace MyAntDesignApp2.Pages.Settings
     public partial class Attrs
     {
         private string _attrPageKey = "规格如下:";
-
         Attr[] attrList;
-
         [Inject]
         public HttpClient hc { get; init; }
 
@@ -33,7 +31,6 @@ namespace MyAntDesignApp2.Pages.Settings
             string requestUri = "http://hw.acgzj.cn:8081" +
             "/api/v1/attr/list?s" + +Random.Shared.Next(int.MaxValue);
             var resp = await hc.GetFromJsonAsync<AttrResp>(requestUri);
-
             Console.WriteLine(resp);
             Console.Out.WriteLine(JsonSerializer.Serialize(resp));
             if (resp.Code != 200)
@@ -41,12 +38,7 @@ namespace MyAntDesignApp2.Pages.Settings
                 // 弹窗 resp.Msg;
                 return;
             }
-
             //resp.Data
-
-
-           
-
             attrList = resp.Data;
 
             requestUri = "http://hw.acgzj.cn:8081" +
@@ -54,10 +46,7 @@ namespace MyAntDesignApp2.Pages.Settings
             var resp2 = await hc.GetFromJsonAsync<MenuResp>(requestUri);
 
             Console.WriteLine(resp2);
-
             Console.Out.WriteLine(JsonSerializer.Serialize(resp2));
-
-
         }
 
         private async Task NoticeWithIcon(string msg)

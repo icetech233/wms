@@ -85,3 +85,337 @@ namespace MyAntDesignApp.Services
 
 
 
+
+
+
+import { listApi } from '@/services/platform/goodsManage/specifications';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ProColumns } from '@ant-design/pro-components';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
+import { useModel } from '@umijs/max';
+import { Button, Popconfirm, Space, Tag } from 'antd';
+import React from 'react';
+import UpdateModal from './components/UpdateModal';
+
+const TableList: React.FC = () => {
+  const {
+    actionRef,
+    updateForm,
+    currentRow,
+    setCurrentRow,
+    updateOpen,
+    setUpdateOpen,
+    handleDelete,
+    handleAdd,
+    handleUpdate,
+  } = useModel('Platform.GoodsManage.Specifications.model');
+
+  const columns: ProColumns<any>[] = [
+    {
+      title: '规格名称',
+      dataIndex: 'attrName',
+      ellipsis: true,
+      width: 300,
+    },
+    {
+      title: '规格值',
+      dataIndex: 'attrValue',
+      width: 140,
+      search: false,
+      render: (_, { attrValue }) => (
+        <div style={{ display: 'flex', flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
+          {attrValue.map((item: any) => {
+            return (
+              <Tag color="blue" key={item?.id}>
+                {item?.valueName}
+              </Tag>
+            );
+          })}
+        </div>
+      ),
+    },
+    {
+      title: '操作',
+      dataIndex: 'operate',
+      search: false,
+      width: 120,
+      fixed: 'right',
+      render: (_, record) => {
+        const { canDelete, id } = record;
+        return (
+          <Space>
+            <Button
+              type="link"
+              style={{ padding: 0 }}
+              onClick={async () => {
+                setCurrentRow(record);
+                setUpdateOpen(true);
+              }}
+            >
+              编辑
+            </Button>
+            <Popconfirm
+              title="删除此规格"
+              description="确定要删除此规格吗？"
+              onConfirm={() =>
+                handleDelete({
+                  id,
+                })
+              }
+              okButtonProps={{
+                danger: true,
+              }}
+              onCancel={() => {}}
+              okText="删除"
+              cancelText="取消"
+            >
+              <Button type="link" style={{ padding: 0 }} danger>
+                删除
+              </Button>
+            </Popconfirm>
+          </Space>
+        );
+      },
+    },
+  ];
+
+  return (
+    <PageContainer>
+      <ProTable
+        rowKey="id"
+        actionRef={actionRef}
+        columns={columns}
+        request={(params) => {
+          const { pageSize, ...restParams } = params;
+          return listApi({
+            ...restParams,
+            size: pageSize,
+          });
+        }}
+        search={{
+          labelWidth: 120,
+          defaultCollapsed: false,
+        }}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          showQuickJumper: true,
+        }}
+        toolBarRender={() => [
+          <Button
+            type="primary"
+            key="primary"
+            onClick={() => {
+              setUpdateOpen(true);
+              setCurrentRow(null);
+              updateForm.resetFields();
+            }}
+          >
+            <PlusOutlined /> 添加规格
+          </Button>,
+        ]}
+        scroll={{
+          y: '65vh',
+        }}
+      />
+      {/* 新增、编辑弹窗 */}
+      <UpdateModal />
+    </PageContainer>
+  );
+};
+
+export default TableList;
+
+
+
+-------------------------------------------------------------
+
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { useModel } from '@umijs/max';
+import { Button, Form, Input, Modal } from 'antd';
+import { useEffect } from 'react';
+
+const formItemLayout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 14,
+  },
+};
+
+const formItemLayoutWithOutLabel = {
+  wrapperCol: {
+    span: 14,
+    offset: 8,
+  },
+};
+
+const UpdateModal = () => {
+  const {
+    actionRef,
+    updateForm,
+    currentRow,
+    setCurrentRow,
+    updateOpen,
+    setUpdateOpen,
+    handleDelete,
+    handleAdd,
+    handleUpdate,
+  } = useModel('Platform.GoodsManage.Specifications.model');
+
+  const handleOk = async () => {
+    const values = await updateForm.validateFields();
+    const { attrValue } = values;
+    if (currentRow?.id) {
+      const { attrValue: rowAttrValue } = currentRow;
+      handleUpdate({
+        ...values,
+        id: currentRow?.id,
+        attrValue: attrValue?.map((valueName: string, index: number) => {
+          // 处理attrValue格式
+          const item: any = {
+            valueName,
+          };
+          const rowItem = rowAttrValue[index];
+          if (rowItem) {
+            const { id, attrId } = rowItem;
+            item.id = id;
+            item.attrId = attrId;
+          }
+          return item;
+        }),
+      });
+    } else {
+      handleAdd({
+        ...values,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (currentRow?.id) {
+      const { attrValue, ...restData } = currentRow;
+      updateForm.setFieldsValue({
+        ...restData,
+        attrValue: attrValue?.map((item: any) => item?.valueName),
+      });
+    }
+  }, [currentRow, updateForm]);
+
+  return (
+    <Modal
+      open={updateOpen}
+      title={currentRow?.id ? '编辑规格' : '添加规格'}
+      keyboard={false}
+      onCancel={() => {
+        setUpdateOpen(false);
+      }}
+      onOk={handleOk}
+    >
+	
+	LabelColSpan=8
+	
+      <Form
+        name="updateSpecifications"
+        form={updateForm}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 14 }}
+        initialValues={{
+          attrValue: [undefined],
+        }}
+        onValuesChange={(e) => {
+          console.log(e);
+        }}
+      >
+        <Form.Item
+          name="attrName"
+          label="规格名"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input placeholder="请输入" />
+        </Form.Item>
+        <Form.List
+          name="attrValue"
+          rules={[
+            {
+              validator: async (_, list) => {
+                if (!list || list.length < 1) {
+                  return Promise.reject(new Error('至少添加一个规格值'));
+                }
+              },
+            },
+          ]}
+        >
+          {(fields, { add, remove }, { errors }) => (
+            <>
+              {fields.map((field, index) => (
+                <Form.Item
+                  {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                  label={index === 0 ? '规格值' : ''}
+                  required={false}
+                  key={field.key}
+                >
+                  <Form.Item
+                    {...field}
+                    validateTrigger={['onChange', 'onBlur']}
+                    rules={[
+                      {
+                        required: true,
+                        whitespace: true,
+                        message: '请输入规格值或删除这一行',
+                      },
+                    ]}
+                    noStyle
+                  >
+                    <Input placeholder="请输入规格值" style={{ width: '90%' }} />
+                  </Form.Item>
+                  {fields.length > 1 ? (
+                    <MinusCircleOutlined
+                      style={{ marginLeft: 10 }}
+                      onClick={() => {
+                        if (currentRow?.id) {
+                          const { attrValue } = currentRow;
+                          const copyAttrValue = [...attrValue];
+                          copyAttrValue.splice(index, 1);
+                          setCurrentRow({
+                            ...currentRow,
+                            attrValue: copyAttrValue,
+                          });
+                        }
+                        remove(field.name);
+                      }}
+                    />
+                  ) : null}
+                </Form.Item>
+              ))}
+              <Form.Item {...formItemLayoutWithOutLabel}>
+                <Button
+                  type="dashed"
+                  onClick={() => add()}
+                  style={{ width: '90%' }}
+                  icon={<PlusOutlined />}
+                >
+                  继续添加
+                </Button>
+                <Form.ErrorList errors={errors} />
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+      </Form>
+    </Modal>
+  );
+};
+
+export default UpdateModal;
+
+
+
+
+
+
