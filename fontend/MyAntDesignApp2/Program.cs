@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using AntDesign;
 
 namespace MyAntDesignApp2
 {
@@ -18,6 +19,9 @@ namespace MyAntDesignApp2
             builder.Services.AddScoped(sp => new HttpClient {
                 BaseAddress = new Uri(baddr)
             });
+
+            // builder.Services.AddScoped<INotificationService, NotificationService>();
+
             // HttpClient : HttpMessageInvoker
             // builder.Services.AddSingleton<HttpMessageInvoker, HttpClient>();
             builder.Services.AddAntDesign();

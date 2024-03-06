@@ -21,9 +21,6 @@ namespace MyAntDesignApp2.Pages.Settings
         [Inject]
         public HttpClient hc { get; init; }
 
-        [Inject]
-        INotificationService _notice { get; init; }
-
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -59,28 +56,19 @@ namespace MyAntDesignApp2.Pages.Settings
             });
         }
 
-        private async void Refresh()
+        private async Task Refresh()
         {
             string requestUri = "http://hw.acgzj.cn:8081" +
 "/api/v1/attr/list?s" + Random.Shared.Next(int.MaxValue);
-            var resp = hc.GetFromJsonAsync<AttrResp>(requestUri).Result;
+            AttrResp resp = await hc.GetFromJsonAsync<AttrResp>(requestUri);
 
-            Console.Out.WriteLine(JsonSerializer.Serialize(resp));
+            // Console.WriteLine(JsonSerializer.Serialize(resp));
             if (resp.Code != 200)
             {
                 await NoticeWithIcon(resp.Msg);
-                return;
             }
             attrList = resp.Data;
         }
 
-
-        private void Refresh22()
-        {
-            var l = attrList.ToList();
-            var newId = l.Last().AttrID + 1;
-            l.Add(new Attr() { AttrID = newId, AttrName = "test" + newId });
-            attrList = l.ToArray();
-        }
     }
 }

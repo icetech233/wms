@@ -2,6 +2,9 @@
 @page "/settings/attrs"
 
 @using MyAntDesignApp2.Models
+@using System.ComponentModel.DataAnnotations
+
+@inject NotificationService _notice
 
 <GridContent Id="#main">
 
@@ -70,13 +73,14 @@
  <Modal Title=@modalTitle Keyboard=false MaskClosable=false Closable=false
         @bind-Visible="@_visible">
 
-        <a>shujuneirong </a>
-@*         <Form LabelColSpan="8" Wra>
-            <FormItem>
+     <Form Model="@model"
+           LabelColSpan="8" WrapperColSpan="14">
+         <FormItem Label="规格名">
+             <Input @bind-Value="@context.AttrName"></Input>
+         </FormItem>
 
-            </FormItem>
-        </Form> *@
-
+     </Form>
+     <a>shujuneirong </a>
  </Modal>
 
  @code {
@@ -84,8 +88,22 @@
     string size = "middle";
     bool _visible = true;
 
+    private Model model = new Model();
+
+    public class Model
+    {
+        [Required]
+        public string AttrName { get; set; }
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+        public bool RememberMe { get; set; } = true;
+    }
+
     private void Delete(long id)
     {
+        attrList = attrList.Where(x => x.AttrID != id).ToArray();
 
         // 删除按钮
 
