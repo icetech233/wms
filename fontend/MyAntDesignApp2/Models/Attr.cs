@@ -16,6 +16,6 @@ namespace MyAntDesignApp2.Models
     {
         public long AttrValueID { get; set; }
         [DisplayName("名称")]
-        public object AttrValueName { get; set; }
+        public string AttrValueName { get; set; }
     }
 }
