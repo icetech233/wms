@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace MyAntDesignApp2.Models
@@ -8,7 +9,7 @@ namespace MyAntDesignApp2.Models
         public string AttrName { get; set; }
         public int ShowType { get; set; }
         [DisplayName("值")]
-        public AttrValue[] Val { get; set; }
+        public List<AttrValue> Val { get; set; }
     }
 
     public class AttrValue : CommonDate

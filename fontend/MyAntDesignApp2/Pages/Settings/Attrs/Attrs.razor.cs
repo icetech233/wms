@@ -16,8 +16,12 @@ namespace MyAntDesignApp2.Pages.Settings
 
     public partial class Attrs
     {
-        private string _attrPageKey = "规格如下:";
-        Attr[] attrList;
+        string modalTitle = "添加规格"; // 编辑规格
+        string size = "middle";
+        bool _visible = false;
+        readonly string _attrPageKey = "规格如下:";
+
+        public Attr[] attrList;
         [Inject]
         public HttpClient hc { get; init; }
 
@@ -43,7 +47,7 @@ namespace MyAntDesignApp2.Pages.Settings
             var resp2 = await hc.GetFromJsonAsync<MenuResp>(requestUri);
 
             Console.WriteLine(resp2);
-            Console.Out.WriteLine(JsonSerializer.Serialize(resp2));
+            Console.WriteLine(JsonSerializer.Serialize(resp2));
         }
 
         private async Task NoticeWithIcon(string msg)
