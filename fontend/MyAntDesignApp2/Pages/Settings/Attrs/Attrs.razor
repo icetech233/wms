@@ -82,7 +82,7 @@
 
  <Modal Title=@modalTitle Keyboard=false MaskClosable=false Closable=false
         @bind-Visible="@_visible"
-        OnOk="handleOk">
+        OnOk="(e)=>handleOk()">
 
      <Form Model="@model" LabelColSpan="6" WrapperColSpan="14"
            ValidateMode="@FormValidateMode.Rules"
@@ -145,11 +145,11 @@
         public List<AttrValue> Val { get; set; }
     }
 
-    private async void handleOk()
+    private async Task handleOk()
     {
         // async Task model.Val
 
-        logger.LogWarning("add:" + JsonSerializer.Serialize(model));
+        logger.LogWarning("add edit:" + JsonSerializer.Serialize(model));
 
         // true 会刷新所有页面巨卡
         // _navigationManager.NavigateTo("/settings/warehouses");
@@ -164,8 +164,16 @@
         {
             await Notice.Error(_notice, str);
         }
+        else
+        {
+            BaseResp resp = JsonSerializer.Deserialize<BaseResp>(str);
+            logger.LogWarning($"edit code {resp.Code},msg {resp.Msg}");
 
-        await Refresh();
+            if (resp.Code == 0)
+            {
+                await Refresh();
+            }
+        }
     }
 
     private void AddAttrValue()

@@ -72,6 +72,7 @@ namespace MyAntDesignApp2.Pages.Settings
                 await Notice.Error(_notice, resp.Msg);
             }
             attrList = resp.Data;
+
         }
 
     }
