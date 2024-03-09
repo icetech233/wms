@@ -1,43 +1,17 @@
 ﻿@page "/"
 
 <AntDesign.ProLayout.PageContainer Title="Welcome">
-
     <Card>
-
         <Body>
-            <Alert Message="AntDesign.Templates have been published to nuget, you can download and use them directly."
+            <Alert Message="留白没有做."
                    Type="warning"
-                   ShowIcon="true"
+                   ShowIcon=@(true)
                    Banner
                    Style="margin: -12px; margin-bottom: 24px" />
-            <Text Strong>
-                <a target="_blank" rel="noopener noreferrer" href="https://www.nuget.org/packages/AntDesign.Templates">
-                    Use .NET CLI to install the latest template quickly.
-                </a>
-            </Text>
-            <pre class="pre"><code><Text Copyable> dotnet new --install AntDesign.Templates::0.1.0-*</Text></code></pre>
-            <Text Strong
-                  Style="margin-bottom: 12px">
-                <a target="_blank" rel="noopener noreferrer" href="https://github.com/ant-design-blazor/ant-design-pro-blazor">
-                    Create an empty blazor WebAssembly project
-                </a>
-            </Text>
-            <pre class="pre"><code><Text Copyable> dotnet new antdesign --host=wasm</Text></code></pre>
-            <Text Strong
-                  Style="margin-bottom: 12px">
-                <a target="_blank" rel="noopener noreferrer" href="https://github.com/ant-design-blazor/ant-design-pro-blazor">
-                    Create a blazor webassembly project with all pages.
-                </a>
-            </Text>
-            <pre class="pre"><code><Text Copyable> dotnet new antdesign --host=wasm --full</Text></code></pre>
-
-
-
         </Body>
-
-
     </Card>
-    <Card>
+
+@*     <Card>
         <Alert Message="AntDesign.Templates have been published to nuget, you can download and use them directly."
                Type="success"
                ShowIcon="true"
@@ -63,14 +37,15 @@
             </a>
         </Text>
         <pre class="pre"><code><Text Copyable> dotnet new antdesign --host=wasm --full</Text></code></pre>
-    </Card>
-    <p style="text-align: center; margin-top: 24px;">
+    </Card> *@
+
+@*     <p style="text-align: center; margin-top: 24px;">
         Want to add more pages? Please refer to
         <a href="https://github.com/ant-design-blazor/ant-design-pro-blazor" target="_blank" rel="noopener noreferrer">
             ant-design-pro-blazor project
         </a>
         .
-    </p>
+    </p> *@
 </AntDesign.ProLayout.PageContainer>
 
 @code {

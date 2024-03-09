@@ -22,6 +22,12 @@
         "name": "系列管理",
         "icon": "appstore",
         "key": "setting.series"
+      },
+      {
+        "path": "/settings/warehouses",
+        "name": "仓库管理",
+        "icon": "home",
+        "key": "setting.warehouses"
       }
     ]
   }

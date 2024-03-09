@@ -1,162 +1,235 @@
 ﻿@namespace MyAntDesignApp2.Pages.Settings
 @page "/settings/attrs"
 
+@using Microsoft.Extensions.Logging
 @using MyAntDesignApp2.Models
 @using System.ComponentModel.DataAnnotations
+@using System.Text.Json
 
 @inject NotificationService _notice
+@inject NavigationManager _navigationManager
 
 <GridContent Id="#main">
 
-	<Alert Message=@_attrPageKey Type="success"
-		   ShowIcon="true"
-		   Style="margin-bottom:12px" />
+    <Alert Message=@_attrPageKey Type="success"
+           ShowIcon="true"
+           Style="margin-bottom:12px" />
 
-	<Space Style="margin-bottom:12px"
-		   Size=@("middle")>
-		<SpaceItem>
-			<Button Color=@Color.Blue7 Icon="@IconType.Fill.PlusCircle"
-					Type="@ButtonType.Primary"
-					OnClick="(e)=>AddAttr()">
-				新增
-			</Button>
+    <Space Style="margin-bottom:12px"
+           Size=@("middle")>
+        <SpaceItem>
+            <Button Color=@Color.Blue7 Icon="@IconType.Fill.PlusCircle"
+                    Type="@ButtonType.Primary"
+                    OnClick="(e)=>AddAttr()">
+                新增
+            </Button>
 
-			<Button Color=@Color.Green4 Icon="@IconType.Outline.Reload"
-					Type="@ButtonType.Primary"
-					OnClick="Refresh">
-				刷新
-			</Button>
-		</SpaceItem>
-	</Space>
+            <Button Color=@Color.Green4 Icon="@IconType.Outline.Reload"
+                    Type="@ButtonType.Primary"
+                    OnClick="Refresh">
+                刷新
+            </Button>
+        </SpaceItem>
+    </Space>
 
-	<Table TItem="Attr" DataSource="@attrList" HidePagination>
-		<Column Title="属性ID" @bind-Field="@context.AttrID" />
-		<Column Title="属性名称" @bind-Field="@context.AttrName" />
+    <Table TItem="Attr" DataSource="@attrList" HidePagination>
+        <Column Title="属性ID" @bind-Field="@context.AttrID" Sortable />
+         <Column Title="属性名称" @bind-Field="@context.AttrName" />
 
-		<PropertyColumn Property="c=>c.Val">
+         <PropertyColumn Property="c=>c.Val">
 
-			@if (context.Val?.Count > 0)
-			{
-				foreach (AttrValue tag in context.Val)
-				{
-					PresetColor c1 = (PresetColor)Random.Shared.Next(13);
-					var color = c1.ToString();
-					// color = "#3b5999";
-					<Tag Color="@color">@tag.AttrValueName</Tag>
-				}
+             @if (context.Val?.Count > 0)
+            {
+                foreach (AttrValue tag in context.Val)
+                {
+                    PresetColor c1 = (PresetColor)Random.Shared.Next(13);
+                    var color = c1.ToString();
+                    // color = "#3b5999";
+                    <Tag Color="@color">@tag.AttrValueName</Tag>
+                }
 
-			}
-			else
-			{
-				<span>-</span>
-				@* <Tag Color="red-inverse">@("无")</Tag> *@
-			}
-		</PropertyColumn>
+            }
+            else
+            {
+                <span>-</span>
+                @* <Tag Color="red-inverse">@("无")</Tag> *@
+            }
+        </PropertyColumn>
 
 
-		<PropertyColumn Property="c=>c.CreatedAt"
-						Sortable />
-		<PropertyColumn Property="c=>c.UpdatedAt"
-						Sortable></PropertyColumn>
+        <PropertyColumn Property="c=>c.CreatedAt"
+                            Sortable />
+         <PropertyColumn Property="c=>c.UpdatedAt"
+                            Sortable></PropertyColumn>
 
-		<ActionColumn Title="操作">
-			<Space>
-				<SpaceItem>
-					<Button OnClick="(e)=>EditAttr(context)">编辑</Button>
-				</SpaceItem>
-				<SpaceItem>
-					<Button Danger Icon="@IconType.Fill.Delete"
-							Type="@ButtonType.Primary"
-							OnClick="(e)=>Delete(context.AttrID)" />
-				</SpaceItem>
-			</Space>
-		</ActionColumn>
+         <ActionColumn Title="操作">
+             <Space>
+                 <SpaceItem>
+                     <Button OnClick="(e)=>EditAttr(context)">编辑</Button>
+                 </SpaceItem>
+                 <SpaceItem>
+                     <Button Danger Icon="@IconType.Fill.Delete"
+                             Type="@ButtonType.Primary"
+                             OnClick="(e)=>Delete(context.AttrID)" />
+                 </SpaceItem>
+             </Space>
+         </ActionColumn>
 
-	</Table>
-</GridContent>
+     </Table>
+ </GridContent>
 
-<Modal Title=@modalTitle Keyboard=false MaskClosable=false Closable=false
-	   @bind-Visible="@_visible">
+ @* Modal DestroyOnClose=@true  请输入规格值或删除这一行 *@
 
-	<Form Model="@model" LabelColSpan="6" WrapperColSpan="14" ValidateMode="@FormValidateMode.Default">
+ <Modal Title=@modalTitle Keyboard=false MaskClosable=false Closable=false
+        @bind-Visible="@_visible"
+        OnOk="handleOk">
 
-		<FormItem Label="规格名称">
-			<Input Placeholder="请输入" @bind-Value="@context.AttrName"></Input>
-		</FormItem>
-		<Divider></Divider>
-		@foreach (AttrValue tmpattr in context.Val)
-		{
-			<FormItem Label="值">
-				<Input Placeholder="请输入" Style="width:82%;margin-right:8px"
-				@bind-Value="tmpattr.AttrValueName" />
-				<Button Danger Type="@ButtonType.Dashed"
-						Icon="@IconType.Fill.Delete" OnClick="(e)=>DeleteAttrValue(tmpattr)"></Button>
-			</FormItem>
-		}
+     <Form Model="@model" LabelColSpan="6" WrapperColSpan="14"
+           ValidateMode="@FormValidateMode.Rules"
+           OnFinish=@(OnFinish) OnFinishFailed=@(OnFinishFailed)>
 
-		<FormItem WrapperColOffset="6" WrapperColSpan="14">
-			<Button Type="@ButtonType.Primary" OnClick="AddAttrValue">
-				<Icon Type="@IconType.Outline.PlusSquare" /> 新增
-			</Button>
-		</FormItem>
-	</Form>
+         <FormItem Label="规格名称" Required=true
+                   Rules=@(new[] {new FormValidationRule{ Len=1, Max=10, Required=true}})>
+             <Input Placeholder="请输入" @bind-Value="@context.AttrName"></Input>
+         </FormItem>
+         <Divider></Divider>
+         @foreach (AttrValue tmpattr in context.Val)
+        {
+            @* Rules="" *@
+
+            <FormItem Label="值" Required=true>
+                <Input Placeholder="请输入" Style="width:82%;margin-right:8px"
+                       @bind-Value="tmpattr.AttrValueName" />
+                <Button Danger Type="@ButtonType.Dashed"
+                         Icon="@IconType.Fill.Delete" OnClick="(e)=>DeleteAttrValue(tmpattr)"></Button>
+             </FormItem>
+        }
+
+        <FormItem WrapperColOffset="6" WrapperColSpan="14">
+            <Button Type="@ButtonType.Primary" OnClick="AddAttrValue">
+                <Icon Type="@IconType.Outline.PlusSquare" /> 新增
+            </Button>
+        </FormItem>
+    </Form>
 
 </Modal>
 
 @code {
 
-	private AttrModel model = new();
+    private void OnFinish(EditContext editContext)
+    {
+        Console.WriteLine($"Success:{JsonSerializer.Serialize(model)}");
+    }
 
-	public class AttrModel
-	{
-		[System.ComponentModel.DataAnnotations.Required]
-		[StringLength(10, MinimumLength = 1)]
-		public string AttrName { get; set; }
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(model)}");
+    }
 
-		[Required]
-		[MinLength(1, ErrorMessage = "属性值最小数量1")]
-		public List<AttrValue> Val { get; set; }
+    private AttrModel model = new();
 
-	}
+    public class AttrModel
+    {
 
-	private void AddAttrValue()
-	{
-		model.Val.Add(new() { AttrValueName  = ""});
-	}
+        public long AttrID { get; set; }
 
-	private void DeleteAttrValue(AttrValue v)
-	{
-		model.Val.Remove(v);
-	}
+        [System.ComponentModel.DataAnnotations.Required]
+        [StringLength(10, MinimumLength = 1)]
+        public string AttrName { get; set; }
 
-	private void AddAttr()
-	{
-		// 清空数据
-		modalTitle = "添加规格";
-		_visible = true;
-		//
-	}
+        [Required]
+        [MinLength(1, ErrorMessage = "属性值最小数量1")]
+        public List<AttrValue> Val { get; set; }
 
-	private async void EditAttr(Attr attr)
-	{
-		modalTitle = "编辑规格";
-		if (attr == null)
-		{
-			await NoticeWithIcon("无数据");
-		}
+    }
 
-		model.AttrName = attr.AttrName;
-		model.Val = attr.Val;
-		_visible = true;
-	}
+    private async void handleOk()
+    {
+        // async Task model.Val
 
-	private void Delete(long id)
-	{
-		// 请求网络 delete 接口
-		attrList = attrList.Where(x => x.AttrID != id).ToArray();
+        logger.LogWarning("add:" + JsonSerializer.Serialize(model));
 
-		// 删除按钮
-		// https://antblazor.com/zh-CN/components/tag
-	}
+        // true 会刷新所有页面巨卡
+        // _navigationManager.NavigateTo("/settings/warehouses");
+
+        // 数据转化
+        string requestUri = "http://hw.acgzj.cn:8081" +
+    "/api/v1/attr/edit?s=" + Random.Shared.Next(int.MaxValue);
+        var resMsg = await hc.PutAsJsonAsync<AttrModel>(requestUri, model);
+        string str = await resMsg.Content.ReadAsStringAsync();
+        //
+        if (resMsg.StatusCode != HttpStatusCode.OK)
+        {
+            await Notice.Error(_notice, str);
+        }
+
+        // // Console.WriteLine(JsonSerializer.Serialize(resp));
+        // if (resp.Code != 200)
+        // {
+        //     await NoticeWithIcon(resp.Msg);
+        // }
+        // else
+        // {
+        // }
+        // attrList = resp.Data;
+
+    }
+
+    private void AddAttrValue()
+    {
+        model.Val.Add(new() { AttrValueName = "" });
+    }
+
+    private async Task DeleteAttrValue(AttrValue v)
+    {
+        if (model.Val.Count > 1)
+        {
+            model.Val.Remove(v);
+            return;
+        }
+        await Notice.Error(_notice, "至少添加一个规格值");
+    }
+
+    private void AddAttr()
+    {
+        // 清空数据
+        modalTitle = "添加规格";
+
+        AttrValue[] attrValArray = [new() { AttrValueName = "" }];
+        model.AttrID = 0;
+        model.AttrName = "请输入";
+        model.Val = attrValArray.ToList();
+        //
+        _visible = true;
+    }
+
+    private async void EditAttr(Attr attr)
+    {
+        modalTitle = "编辑规格";
+        if (attr == null)
+        {
+            await Notice.Error(_notice, "无数据");
+        }
+
+        if (attr.Val == null || attr.Val.Count == 0)
+        {
+            attr.Val = new();
+            attr.Val.Add(new AttrValue { AttrValueName = "value1" });
+        }
+
+        model.AttrID = attr.AttrID;
+        model.AttrName = attr.AttrName;
+        model.Val = new List<AttrValue>(attr.Val);
+        _visible = true;
+    }
+
+    private void Delete(long id)
+    {
+        // 请求网络 delete 接口
+        attrList = attrList.Where(x => x.AttrID != id).ToArray();
+
+        // 删除按钮
+        // https://antblazor.com/zh-CN/components/tag
+    }
 
 }
