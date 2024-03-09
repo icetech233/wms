@@ -29,6 +29,7 @@ func InitRouterV1(engine *gin.Engine) *gin.Engine {
 		g_attr := v1api.Group("/attr")
 		g_attr.GET("/list", v1.AttrV1.AttrList)
 		g_attr.POST("/add", v1.AttrV1.AttrAdd)
+		g_attr.PUT("/edit", v1.AttrV1.AttrEdit)
 		//
 		g_menu := v1api.Group("/menu")
 		g_menu.GET("/list", v1.MenuV1.MenuList)

@@ -1,12 +1,20 @@
 package v1
 
 import (
+	"io"
 	"wms/service/impl"
 	"wms/service/request"
 	"wms/service/response"
+	"wms/util"
 
 	"github.com/gin-gonic/gin"
 )
+
+func (a *attrApi) AttrEdit(c *gin.Context) {
+	bb, _ := io.ReadAll(c.Request.Body)
+	util.Log(string(bb) + "\n")
+	response.Ok(c)
+}
 
 func (a *attrApi) AttrList(c *gin.Context) {
 	outList := impl.AttrSrvImpl.List(c, nil)
