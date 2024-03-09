@@ -131,7 +131,7 @@
 
     public class AttrModel
     {
-        public string OldAttrName { get; set; }
+        public string OldAttrName { private get; set; }
         public bool IsChangedAttrName { get => OldAttrName != AttrName; }
 
         public long AttrID { get; set; }
@@ -191,6 +191,7 @@
         AttrValue[] attrValArray = [new() { AttrValueName = "" }];
         model.AttrID = 0;
         model.AttrName = "请输入";
+        model.OldAttrName = "";
         model.Val = attrValArray.ToList();
         //
         _visible = true;
@@ -212,6 +213,7 @@
 
         model.AttrID = attr.AttrID;
         model.AttrName = attr.AttrName;
+        model.OldAttrName = attr.AttrName;
         model.Val = new List<AttrValue>(attr.Val);
         _visible = true;
     }

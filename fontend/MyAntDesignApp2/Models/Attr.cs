@@ -12,7 +12,7 @@ namespace MyAntDesignApp2.Models
         public List<AttrValue> Val { get; set; }
     }
 
-    public class AttrValue : CommonDate
+    public class AttrValue
     {
         public long AttrValueID { get; set; }
         [DisplayName("名称")]
