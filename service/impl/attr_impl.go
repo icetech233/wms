@@ -16,13 +16,6 @@ type AttrService struct {
 
 var AttrSrvImpl AttrService
 
-// /attr/edit
-
-func (s *AttrService) Edit(ctx context.Context, arg any) error {
-
-	return nil
-}
-
 func (s *AttrService) List(ctx context.Context, arg any) []*model.Attr {
 	attrs, resultDb := gplus.SelectList[entity.Attr](nil)
 	if resultDb.Error != nil {
@@ -78,5 +71,20 @@ func (s *AttrService) Add(ctx context.Context, arg *request.AddAttrRequest) erro
 		return errors.New("insert attr err:" + resultDb.Error.Error())
 	}
 	util.Log("attr id:", attr.AttrID)
+	return nil
+}
+
+func (s *AttrService) Edit(ctx context.Context, arg *request.EditAttrRequest) error {
+
+	if arg.IsChangedAttrName {
+		attr := entity.Attr{AttrID: arg.AttrID, AttrName: arg.AttrName}
+		if arg.AttrID > 0 {
+			// 更新 resultDb
+			_ = gplus.UpdateById[entity.Attr](&attr)
+		} else {
+			_ = gplus.Insert(&attr)
+		}
+	}
+
 	return nil
 }

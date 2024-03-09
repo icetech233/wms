@@ -11,9 +11,16 @@ type AddAttrRequest struct {
 }
 
 type EditAttrRequest struct {
-	AttrID   int64  `json:"attrID"`   // 属性名称
-	AttrName string `json:"attrName"` // 属性名称
-	ShowType int    `json:"showType"` // 1 单选, 2 布尔, 3 多选
+	IsChangedAttrName bool         `json:"isChangedAttrName"`
+	AttrID            int64        `json:"attrID"`   // 属性名称
+	AttrName          string       `json:"attrName"` // 属性名称
+	ShowType          int          `json:"showType"` // 1 单选, 2 布尔, 3 多选
+	Val               []*AttrValue `json:"val"`
+}
+
+type AttrValue struct {
+	AttrValueID   int64  `json:"attrValueID"`
+	AttrValueName string `json:"attrValueName"`
 }
 
 type AddMenuRequest struct {
