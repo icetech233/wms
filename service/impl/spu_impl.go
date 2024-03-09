@@ -3,7 +3,6 @@ package impl
 import (
 	"context"
 	"errors"
-	"fmt"
 	"wms/entity"
 	"wms/service/model"
 	"wms/service/request"
@@ -55,6 +54,6 @@ func (s *spuService) Add(ctx context.Context, arg *request.AddSpuRequest) error 
 	if resultDb.Error != nil {
 		return errors.New("insert spu err:" + resultDb.Error.Error())
 	}
-	fmt.Println("spu id:", spu.SpuID)
+	util.Log("spu id:", spu.SpuID)
 	return nil
 }

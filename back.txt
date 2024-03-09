@@ -38,8 +38,8 @@ func testCopy() {
 		if er2 != nil {
 			panic(er2)
 		}
-		fmt.Println("复制耗时:", time.Since(t1))
-		fmt.Println("结果", src, dst)
+		Log("复制耗时:", time.Since(t1))
+		Log("结果", src, dst)
 	}
 }
 
@@ -50,18 +50,18 @@ func main2() {
 	tof := reflect.TypeOf(t1)
 	vof := reflect.ValueOf(t1)
 	tof = vof.Type()
-	fmt.Println(tof.Name(), tof.Kind())
+	Log(tof.Name(), tof.Kind())
 	tof.Elem()
 
 	t2, _ := vof.Interface().(time.Time)
-	fmt.Println(t2)
+	Log(t2)
 	return
 
 	spus, resultDb := gplus.SelectList[Spu](nil)
 	spew.Dump(resultDb.Error, resultDb.RowsAffected)
 	for _, spu := range spus {
 		b, _ := json.Marshal(spu)
-		fmt.Println("spu:", string(b))
+		Log("spu:", string(b))
 	}
 }
 
@@ -83,7 +83,7 @@ func main2() {
 // 	if err != nil {
 // 		panic(err)
 // 	}
-// 	fmt.Println("请求时间:", q.RequestTime)
+// 	Log("请求时间:", q.RequestTime)
 // 	//fmt.Printf("KV: %v \n**\n%s\n", pair.Key, pair.Value)
 // 	return pair.Value
 // }

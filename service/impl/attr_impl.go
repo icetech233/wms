@@ -3,7 +3,6 @@ package impl
 import (
 	"context"
 	"errors"
-	"fmt"
 	"wms/entity"
 	"wms/service/model"
 	"wms/service/request"
@@ -16,6 +15,13 @@ type AttrService struct {
 }
 
 var AttrSrvImpl AttrService
+
+// /attr/edit
+
+func (s *AttrService) Edit(ctx context.Context, arg any) error {
+
+	return nil
+}
 
 func (s *AttrService) List(ctx context.Context, arg any) []*model.Attr {
 	attrs, resultDb := gplus.SelectList[entity.Attr](nil)
@@ -71,6 +77,6 @@ func (s *AttrService) Add(ctx context.Context, arg *request.AddAttrRequest) erro
 	if resultDb.Error != nil {
 		return errors.New("insert attr err:" + resultDb.Error.Error())
 	}
-	fmt.Println("attr id:", attr.AttrID)
+	util.Log("attr id:", attr.AttrID)
 	return nil
 }

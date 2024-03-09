@@ -3,7 +3,6 @@ package impl
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strings"
 	"wms/entity"
 	"wms/service/model"
@@ -54,6 +53,6 @@ func (s *menuService) Add(ctx context.Context, arg *request.AddMenuRequest) erro
 	if resultDb.Error != nil {
 		return errors.New("insert menu err:" + resultDb.Error.Error())
 	}
-	fmt.Println("menu id:", menu.MenuID)
+	util.Log("menu id:", menu.MenuID)
 	return nil
 }

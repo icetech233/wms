@@ -2,7 +2,6 @@ package util
 
 import (
 	"errors"
-	"fmt"
 	"reflect"
 	"strconv"
 	"time"
@@ -25,7 +24,7 @@ func CopyStruct(dst, src any) error {
 	// dv = dv.Elem() //reflect.Indirect(dv)
 
 	fields := modelFields(sv)
-	// fmt.Println(fields)
+	// Log(fields)
 	for _, f := range fields {
 		// f.Index
 		sfv := sv.FieldByName(f.Name)
@@ -37,9 +36,9 @@ func CopyStruct(dst, src any) error {
 		}
 		err := copyVal(dfv, sfv)
 		if err != nil {
-			fmt.Println(err, "***", f, "***")
+			Log("menu id:", err, "***", f, "***")
 		}
-		// fmt.Println("hh***", sfv, "*", dfv, "***")
+		// Log("hh***", sfv, "*", dfv, "***")
 	}
 	return nil
 }
@@ -48,7 +47,7 @@ func copyVal(dfv reflect.Value, sfv reflect.Value) error {
 	dt := dfv.Type()
 	st := sfv.Type()
 	// st.AssignableTo()
-	// fmt.Println("dt.Kind()", dt.Kind()) fmt.Println("st.Kind()", st.Kind())
+	// Log("dt.Kind()", dt.Kind()) Log("st.Kind()", st.Kind())
 	if st.Kind() == dt.Kind() {
 		dfv.Set(sfv)
 		return nil
@@ -61,7 +60,7 @@ func copyVal(dfv reflect.Value, sfv reflect.Value) error {
 				dfv.SetString(intStr)
 				return nil
 			case reflect.Struct:
-				// // fmt.Println("特殊123类型", st.String(), st.Name()) 特殊123类型 time.Time Time
+				// // Log("特殊123类型", st.String(), st.Name()) 特殊123类型 time.Time Time
 				if st.String() == "time.Time" {
 					// sfv.Pointer()
 					time1 := sfv.Interface().(time.Time)
@@ -94,7 +93,7 @@ func modelFields(v reflect.Value) []reflect.StructField {
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
 		// 比较类型 f.Type.Kind() == reflect.Chan
-		// fmt.Println("PkgPath:"+f.PkgPath+";", f.Name, f.Type, "***")
+		// Log("PkgPath:"+f.PkgPath+";", f.Name, f.Type, "***")
 		// 小写字段的PkgPath会带上包名,比如main
 		if f.PkgPath == "" {
 			fs = append(fs, f)

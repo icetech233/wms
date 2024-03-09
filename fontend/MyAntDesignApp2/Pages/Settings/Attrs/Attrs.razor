@@ -90,7 +90,8 @@
 
          <FormItem Label="规格名称" Required=true
                    Rules=@(new[] {new FormValidationRule{ Len=1, Max=10, Required=true}})>
-             <Input Placeholder="请输入" @bind-Value="@context.AttrName"></Input>
+             <Input Placeholder="请输入"
+                @bind-Value="@context.AttrName"></Input>
          </FormItem>
          <Divider></Divider>
          @foreach (AttrValue tmpattr in context.Val)
@@ -130,6 +131,8 @@
 
     public class AttrModel
     {
+        public string OldAttrName { get; set; }
+        public bool IsChangedAttrName { get => OldAttrName != AttrName; }
 
         public long AttrID { get; set; }
 
@@ -140,7 +143,6 @@
         [Required]
         [MinLength(1, ErrorMessage = "属性值最小数量1")]
         public List<AttrValue> Val { get; set; }
-
     }
 
     private async void handleOk()
@@ -163,16 +165,7 @@
             await Notice.Error(_notice, str);
         }
 
-        // // Console.WriteLine(JsonSerializer.Serialize(resp));
-        // if (resp.Code != 200)
-        // {
-        //     await NoticeWithIcon(resp.Msg);
-        // }
-        // else
-        // {
-        // }
-        // attrList = resp.Data;
-
+        await Refresh();
     }
 
     private void AddAttrValue()

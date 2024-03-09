@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"wms/api/v1/router"
 	"wms/internal"
+	"wms/util"
 
 	"github.com/acmestack/gorm-plus/gplus"
 	"github.com/gin-gonic/gin"
@@ -45,7 +45,7 @@ func initDb() {
 	})
 
 	if err != nil {
-		fmt.Println(err)
+		util.Log(err)
 	}
 
 	// 初始化gplus
