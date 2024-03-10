@@ -8,8 +8,15 @@
 
     public class BaseResp
     {
-        public int Code { get; init; }
-        public string Msg { get; init; }
+        public int Code { get; set; }
+        public string Msg { get; set; }
+    }
+
+    public class WarehouseResp : BaseResp
+    {
+        public object Debug { get; set; }
+        public Warehouse[] Data { get; set; }
+
     }
 
 }

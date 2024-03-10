@@ -1,17 +1,67 @@
 ﻿@namespace MyAntDesignApp2.Pages.Settings
 @page "/settings/warehouses"
+@using MyAntDesignApp2.Models
 
-@inherits LayoutComponentBase
 
-<h3>setting warehouses</h3>
+@inject NotificationService _notice
+@inject NavigationManager _navigationManager
+
+<h3>setting warehouse</h3>
 
 <GridContent Id="#main">
-    <h3>@_selectKey</h3>
+
+    <Alert Message=@_PageKey Type="success" ShowIcon="true" Style="margin-bottom:8px" />
+
+    <Space Style="margin-bottom:8px"
+           Size=@size>
+        <SpaceItem>
+            <Button Color=@Color.Blue7 Icon="@IconType.Fill.PlusCircle"
+                    Type="@ButtonType.Primary"
+                    OnClick="(e)=>AddWarehouses()">
+                新增
+            </Button>
+
+            <Button Color=@Color.Green4 Icon="@IconType.Outline.Reload"
+                    Type="@ButtonType.Primary"
+                    OnClick="Refresh">
+                刷新
+            </Button>
+        </SpaceItem>
+    </Space>
+
+    
+    <Table TItem="Warehouse" DataSource=@warehouseList HidePagination>
+
+        <PropertyColumn Property="c=>c.WarehouseID" />
+        <PropertyColumn Property="c=>c.WarehouseCode" Sortable />
+        <PropertyColumn Property="c=>c.WarehouseName" />
+        <PropertyColumn Property="c=>c.Enable" />
+        <PropertyColumn Property="c=>c.Supervisor" />
+        <PropertyColumn Property="c=>c.Tel" />
+        <PropertyColumn Property="c=>c.Address" />
+        <PropertyColumn Property="c=>c.UpdatedAt" />
+
+        @*
+        OnClick="(e)=>Delete(context.AttrID)"
+        *@
+        <ActionColumn Title="操作">
+            <Space>
+                <SpaceItem>
+                    <Button OnClick="(e)=>EditWarehouse(context)">编辑</Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button Danger Icon="@IconType.Fill.Delete" Type="@ButtonType.Primary" />
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+     </Table>
+
 
 </GridContent>
 
 @code{
+     
+    public Warehouse[] warehouseList;
 
-    // 
-    // 
+
 }

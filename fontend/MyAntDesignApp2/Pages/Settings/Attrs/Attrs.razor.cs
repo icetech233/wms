@@ -12,8 +12,6 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 // Microsoft.Extensions.Logging;
 
-
-
 namespace MyAntDesignApp2.Pages.Settings
 {
 
@@ -57,8 +55,6 @@ namespace MyAntDesignApp2.Pages.Settings
             Console.WriteLine(resp2);
             Console.WriteLine(JsonSerializer.Serialize(resp2));
         }
-
-
 
         private async Task Refresh()
         {
