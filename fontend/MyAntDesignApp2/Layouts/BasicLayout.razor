@@ -4,7 +4,8 @@
 <AntDesign.ProLayout.BasicLayout 
     Theme=MenuTheme.Dark
     Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
-                                 MenuData="_menuData" Title="G-WMS" Mode=@MenuMode.Vertical
+                                 OpenKeys=@_openKeys
+                                 MenuData=@_menuData Title="G-WMS" 
                                  BaseURL="/settings/attrs" Collapsed=false >
     <RightContentRender>
     </RightContentRender>
@@ -18,7 +19,9 @@
 
 @code
 {
-    private MenuDataItem[] _menuData;
+    MenuDataItem[] _menuData;
+    string[] _openKeys = new string[]{ "setting" };
+
     // private MenuDataItem[] _menuData =
     // {
     //     new MenuDataItem
@@ -30,7 +33,7 @@
     //     }
     // };
 
-    [Inject] public HttpClient hc { get; init; }
+    [Inject] public HttpClient hc { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,12 +1,9 @@
 ﻿@namespace MyAntDesignApp2.Pages.Settings
 @page "/settings/warehouses"
 @using MyAntDesignApp2.Models
-
+@using System.Text.Json
 
 @inject NotificationService _notice
-@inject NavigationManager _navigationManager
-
-<h3>setting warehouse</h3>
 
 <GridContent Id="#main">
 
@@ -35,7 +32,10 @@
         <PropertyColumn Property="c=>c.WarehouseID" />
         <PropertyColumn Property="c=>c.WarehouseCode" Sortable />
         <PropertyColumn Property="c=>c.WarehouseName" />
-        <PropertyColumn Property="c=>c.Enable" />
+        <PropertyColumn Property="c=>c.Enable">
+            @* @bind-Value="@context.Enable" *@
+            <Switch Disabled @bind-Checked=@context.Enable />
+        </PropertyColumn>
         <PropertyColumn Property="c=>c.Supervisor" />
         <PropertyColumn Property="c=>c.Tel" />
         <PropertyColumn Property="c=>c.Address" />
@@ -59,9 +59,80 @@
 
 </GridContent>
 
+
+
+<Modal Title=@modalTitle Keyboard=false MaskClosable=false Closable=false
+       @bind-Visible="@_visible"
+       OnOk="(e)=>handleOk()">
+
+    <Form Model="@model" LabelColSpan="6" WrapperColSpan="14"
+          ValidateMode="@FormValidateMode.Rules" >
+
+        <FormItem Label="编码" Required=true>
+            <Input Placeholder="请输入编码" @bind-Value="@context.WarehouseCode"></Input>
+        </FormItem>
+
+        <FormItem Label="名称" Required=true>
+            <Input Placeholder="请输入名称" @bind-Value="@context.WarehouseName" />
+        </FormItem>
+        <FormItem Label="启用" Required=true>
+            <Switch @bind-Value="@context.Enable" />
+        </FormItem>
+
+        <FormItem Label="管理员" Required=true>
+            <Input Placeholder="请输入管理员姓名" @bind-Value="@context.Supervisor" />
+        </FormItem>
+        <FormItem Label="电话" Required=true>
+            <Input Placeholder="请输入电话" @bind-Value="@context.Tel" />
+        </FormItem>
+        <FormItem Label="地址" Required=true>
+
+            <TextArea ShowCount MaxLength="50" @bind-Value="@context.Address" />
+        </FormItem>
+
+    </Form>
+
+</Modal>
+
+
+
 @code{
-     
+
     public Warehouse[] warehouseList;
 
+
+    private async Task handleOk()
+    {
+        // async Task model
+        Console.WriteLine("add edit:" + JsonSerializer.Serialize(model));
+        HttpResponseMessage resMsg;
+        string requestUri;
+        if (model.WarehouseID > 0)
+        {
+            requestUri = "/api/v1/warehouse/edit?s=" + Random.Shared.Next(int.MaxValue);
+            resMsg = await hc.PutAsJsonAsync<WarehouseModel>(requestUri, model);
+        }
+        else
+        {
+            requestUri = "/api/v1/warehouse/add?s=" + Random.Shared.Next(int.MaxValue);
+            resMsg = await hc.PostAsJsonAsync<WarehouseModel>(requestUri, model);
+        }
+        string str = await resMsg.Content.ReadAsStringAsync();
+        //
+        if (resMsg.StatusCode != HttpStatusCode.OK)
+        {
+            await Notice.Error(_notice, str);
+        }
+        else
+        {
+            BaseResp resp = JsonSerializer.Deserialize<BaseResp>(str, Constants.CamelCaseOpt);
+            Console.WriteLine($"edit code {resp.Code},msg {resp.Msg}");
+
+            if (resp.Code == 200)
+            {
+                await Refresh();
+            }
+        }
+    }
 
 }

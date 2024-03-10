@@ -17,8 +17,8 @@ namespace MyAntDesignApp2.Pages.Settings
 
     public partial class Attrs
     {
-        [Inject]
-        private ILogger<Attrs> logger { get; set; }
+        //[Inject]
+        //private ILogger<Attrs> logger { get; set; }
 
         string modalTitle = "添加规格"; // 编辑规格
         string size = "middle";
@@ -27,16 +27,14 @@ namespace MyAntDesignApp2.Pages.Settings
 
         public Attr[] attrList;
         [Inject]
-        public HttpClient hc { get; init; }
+        public HttpClient hc { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            logger.LogWarning("Someone has clicked me!");
             // OnAfterRenderAsync
             await base.OnInitializedAsync();
 
-            string requestUri = "http://hw.acgzj.cn:8081" +
-            "/api/v1/attr/list?s=" + Random.Shared.Next(int.MaxValue);
+            string requestUri = "/api/v1/attr/list?s=" + Random.Shared.Next(int.MaxValue);
             var resp = await hc.GetFromJsonAsync<AttrResp>(requestUri);
             Console.WriteLine(resp);
             Console.Out.WriteLine(JsonSerializer.Serialize(resp));
@@ -48,8 +46,7 @@ namespace MyAntDesignApp2.Pages.Settings
             //resp.Data
             attrList = resp.Data;
 
-            requestUri = "http://hw.acgzj.cn:8081" +
-"/api/v1/menu/list?s=" + Random.Shared.Next(int.MaxValue);
+            requestUri = "/api/v1/menu/list?s=" + Random.Shared.Next(int.MaxValue);
             var resp2 = await hc.GetFromJsonAsync<MenuResp>(requestUri);
 
             Console.WriteLine(resp2);
@@ -58,14 +55,13 @@ namespace MyAntDesignApp2.Pages.Settings
 
         private async Task Refresh()
         {
-            string requestUri = "http://hw.acgzj.cn:8081" +
-"/api/v1/attr/list?s=" + Random.Shared.Next(int.MaxValue);
+            string requestUri = "/api/v1/attr/list?s=" + Random.Shared.Next(int.MaxValue);
             AttrResp resp = await hc.GetFromJsonAsync<AttrResp>(requestUri);
 
-            // Console.WriteLine(JsonSerializer.Serialize(resp));
+            Console.WriteLine(JsonSerializer.Serialize(resp));
             if (resp.Code != 200)
             {
-                await Notice.Error(_notice, resp.Msg);
+                // await Notice.Error(_notice, resp.Msg);
             }
             attrList = resp.Data;
 

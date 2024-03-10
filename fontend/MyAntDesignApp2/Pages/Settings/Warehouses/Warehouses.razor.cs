@@ -15,19 +15,19 @@ namespace MyAntDesignApp2.Pages.Settings
 {
     public partial class Warehouses
     {
-        const string _PageKey = "规格如下:";
+        const string _PageKey = "仓库:";
         string size = "middle";
         bool _visible = false;
         string modalTitle = "添加仓库"; // 编辑仓库
 
+        //[Inject]
+        //private ILogger<Warehouses> logger { get; set; }
         [Inject]
-        private ILogger<Warehouses> logger { get; set; }
-        [Inject]
-        public HttpClient hc { get; init; }
+        public HttpClient hc { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            logger.LogWarning("OnInitializedAsync has clicked me!");
+            // logger.LogWarning("OnInitializedAsync has clicked me!");
             await base.OnInitializedAsync();
 
             await Refresh();
@@ -73,7 +73,6 @@ namespace MyAntDesignApp2.Pages.Settings
             if (w == null)
             {
                 await Notice.Error(_notice, "无数据");
-                return;
             }
 
             model.WarehouseID = w.WarehouseID;
@@ -90,13 +89,12 @@ namespace MyAntDesignApp2.Pages.Settings
 
         private async Task Refresh()
         {
-            string requestUri = "http://hw.acgzj.cn:8081" +
-            "/api/v1/warehouse/list?s=" + Random.Shared.Next(int.MaxValue);
+            string requestUri = "/api/v1/warehouse/list?s=" + Random.Shared.Next(int.MaxValue);
             WarehouseResp resp = await hc.GetFromJsonAsync<WarehouseResp>(requestUri);
+            Console.WriteLine($"refresh code {resp.Code} count {resp.Data?.Length}");
             if (resp.Code != 200)
             {
                 await Notice.Error(_notice, resp.Msg);
-                return;
             }
             warehouseList = resp.Data;
         }

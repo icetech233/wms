@@ -14,18 +14,21 @@ namespace MyAntDesignApp2
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-            string baddr = builder.HostEnvironment.BaseAddress;
 
-            builder.Services.AddScoped(sp => new HttpClient {
-                BaseAddress = new Uri(baddr)
+            // /data/menu.json
+            // BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+             
+            builder.Services.AddScoped(sp => new HttpClient 
+            {
+                BaseAddress = new Uri("http://hw.acgzj.cn:8081/")
             });
-
-            // builder.Services.AddScoped<INotificationService, NotificationService>();
-
-            // HttpClient : HttpMessageInvoker
-            // builder.Services.AddSingleton<HttpMessageInvoker, HttpClient>();
             builder.Services.AddAntDesign();
             builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSettings"));
+            //builder.Services.AddScoped<IChartService, ChartService>();
+            //builder.Services.AddScoped<IProjectService, ProjectService>();
+            //builder.Services.AddScoped<IUserService, UserService>();
+            //builder.Services.AddScoped<IAccountService, AccountService>();
+            //builder.Services.AddScoped<IProfileService, ProfileService>();
 
             await builder.Build().RunAsync();
         }

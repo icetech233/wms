@@ -6,8 +6,6 @@
 @using System.Text.Json
 
 @inject NotificationService _notice
-@inject NavigationManager _navigationManager
-
 <GridContent Id="#main">
 
     <Alert Message=@_attrPageKey Type="success"
@@ -146,27 +144,25 @@
 
     private async Task handleOk()
     {
-        // async Task model.Val
-
-        logger.LogWarning("add edit:" + JsonSerializer.Serialize(model));
+        // async Task model 
+        Console.WriteLine("add edit:" + JsonSerializer.Serialize(model));
 
         // true 会刷新所有页面巨卡
         // _navigationManager.NavigateTo("/settings/warehouses");
 
         // 数据转化
-        string requestUri = "http://hw.acgzj.cn:8081" +
-    "/api/v1/attr/edit?s=" + Random.Shared.Next(int.MaxValue);
+        string requestUri = "/api/v1/attr/edit?s=" + Random.Shared.Next(int.MaxValue);
         var resMsg = await hc.PutAsJsonAsync<AttrModel>(requestUri, model);
         string str = await resMsg.Content.ReadAsStringAsync();
         //
         if (resMsg.StatusCode != HttpStatusCode.OK)
         {
-            await Notice.Error(_notice, str);
+            // await Notice.Error(_notice, str);
         }
         else
         {
             BaseResp resp = JsonSerializer.Deserialize<BaseResp>(str, Constants.CamelCaseOpt);
-            logger.LogWarning($"edit code {resp.Code},msg {resp.Msg}");
+            Console.WriteLine($"edit code {resp.Code},msg {resp.Msg}");
 
             if (resp.Code == 200)
             {
@@ -180,7 +176,7 @@
         model.Val.Add(new() { AttrValueName = "" });
     }
 
-    private async Task DeleteAttrValue(AttrValue v)
+    private async void DeleteAttrValue(AttrValue v)
     {
         if (model.Val.Count > 1)
         {
