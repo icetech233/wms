@@ -7,6 +7,7 @@ namespace MyAntDesignApp2.Pages.Settings
 
     public partial class Series
     {
-        private string _selectKey = "base";
+        const string _PageKey = "网关类型:";
+
     }
 }
