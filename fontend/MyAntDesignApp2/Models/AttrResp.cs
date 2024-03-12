@@ -1,4 +1,6 @@
-﻿namespace MyAntDesignApp2.Models
+﻿using System.ComponentModel;
+
+namespace MyAntDesignApp2.Models
 {
     public class AttrResp : BaseResp
     {
@@ -18,5 +20,4 @@
         public Warehouse[] Data { get; set; }
 
     }
-
 }

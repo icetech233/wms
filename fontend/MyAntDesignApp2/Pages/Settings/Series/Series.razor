@@ -1,15 +1,40 @@
 ﻿@namespace MyAntDesignApp2.Pages.Settings
 @page "/settings/series"
 
-@inherits LayoutComponentBase
+@using MyAntDesignApp2.Models
+@using System.Text.Json
+
+@inject NotificationService _notice
 
 <GridContent Id="#main">
     <Alert Message=@_PageKey Type="success" ShowIcon="true"
            Style="margin-bottom:8px" />
 
+    <Collapse DefaultActiveKey="@(new[]{"1","2"})" >
+        <Panel Key="1">
+            <HeaderTemplate>
+                <p>IIG1000E</p>
+            </HeaderTemplate>
+
+        </Panel>
+        <Panel Key="2">
+            <HeaderTemplate>
+                <Alert Type="@AlertType.Info" Message="IIG2000"  />
+            </HeaderTemplate>
+            <ChildContent>
+                <div>IIG2000-4G描述</div>
+                <div>IIG2000-4G描述</div>
+                <div>IIG2000-4G描述</div>
+                <div>IIG2000-4G描述</div>  
+            </ChildContent>
+        </Panel>
+
+
+    </Collapse>
 </GridContent>
 
 @code{
+
 
 
     // private string _selectKey = "base";
