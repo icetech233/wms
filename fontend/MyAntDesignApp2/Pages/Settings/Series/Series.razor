@@ -9,9 +9,7 @@
 <GridContent Id="#main">
     <Alert Message=@_PageKey Type="success" ShowIcon="true"
            Style="margin-bottom:8px" />
-
     <Collapse DefaultActiveKey=@(defaultActiveKey)>
-
         @foreach (Spu spu in spuList)
         {
             <Panel Key=@spu.SpuID.ToString()>
