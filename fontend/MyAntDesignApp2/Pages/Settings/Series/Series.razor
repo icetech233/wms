@@ -10,33 +10,25 @@
     <Alert Message=@_PageKey Type="success" ShowIcon="true"
            Style="margin-bottom:8px" />
 
-    <Collapse DefaultActiveKey="@(new[]{"1","2"})" >
-        <Panel Key="1">
-            <HeaderTemplate>
-                <p>IIG1000E</p>
-            </HeaderTemplate>
+    <Collapse DefaultActiveKey=@(defaultActiveKey)>
 
-        </Panel>
-        <Panel Key="2">
-            <HeaderTemplate>
-                <Alert Type="@AlertType.Info" Message="IIG2000"  />
-            </HeaderTemplate>
-            <ChildContent>
-                <div>IIG2000-4G描述</div>
-                <div>IIG2000-4G描述</div>
-                <div>IIG2000-4G描述</div>
-                <div>IIG2000-4G描述</div>  
-            </ChildContent>
-        </Panel>
-
-
+        @foreach (Spu spu in spuList)
+        {
+            <Panel Key=@spu.SpuID.ToString()>
+                <HeaderTemplate>
+                    <p>@spu.SpuCode</p>
+                </HeaderTemplate>
+                <ChildContent>
+                    @foreach (SKu sku in spu.SkuList)
+                    {
+                        <div>@sku.SkuCode</div>
+                    }
+                </ChildContent>
+            </Panel>
+        }
     </Collapse>
 </GridContent>
 
 @code{
-
-
-
-    // private string _selectKey = "base";
 
 }

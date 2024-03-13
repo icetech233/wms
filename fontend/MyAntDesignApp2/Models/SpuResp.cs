@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace MyAntDesignApp2.Models
 {
     public class SpuResp : BaseResp
     {
         public object Debug { get; set; }
-        public Spu[] Data { get; set; }
+        public List<Spu> Data { get; set; }
     }
 
     public class Spu : CommonDate
@@ -14,6 +15,7 @@ namespace MyAntDesignApp2.Models
         [DisplayName("编码")]
         public string SpuCode { get; set; }
         public string SpuDesc { get; set; }
+        public List<SKu> SkuList { get; set; }
     }
 
     public class SKu : CommonDate

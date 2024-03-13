@@ -13,11 +13,4 @@ namespace MyAntDesignApp2.Models
         public int Code { get; set; }
         public string Msg { get; set; }
     }
-
-    public class WarehouseResp : BaseResp
-    {
-        public object Debug { get; set; }
-        public Warehouse[] Data { get; set; }
-
-    }
 }
