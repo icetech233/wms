@@ -13,19 +13,19 @@ using MyAntDesignApp2.Models;
 
 namespace MyAntDesignApp2.Pages.Settings
 {
-    public partial class Dicts
+    public partial class Tenants
     {
-        const string _PageKey = "字典选项:";
+        const string _PageKey = "企业信息:";
         string size = "middle";
         bool _visible = false;
-        string modalTitle = "添加仓库"; // 编辑仓库
+        string modalTitle = "添加"; // 编辑
+        private Tenant[] tenantList;
 
         [Inject]
         public HttpClient hc { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            // logger.LogWarning("OnInitializedAsync has clicked me!");
             await base.OnInitializedAsync();
 
             await Refresh();
@@ -34,19 +34,18 @@ namespace MyAntDesignApp2.Pages.Settings
         private TenantModel model = new();
         public class TenantModel
         {
-
         }
 
         private async Task Refresh()
         {
-            string requestUri = "/api/v1/dict/list?s=" + Random.Shared.Next(int.MaxValue);
-            DictResp resp = await hc.GetFromJsonAsync<DictResp>(requestUri);
+            string requestUri = "/api/v1/tenant/list?s=" + Random.Shared.Next(int.MaxValue);
+            TenantResp resp = await hc.GetFromJsonAsync<TenantResp> (requestUri);
             Console.WriteLine($"refresh code {resp.Code} count {resp.Data?.Length}");
             if (resp.Code != 200)
             {
                 await Notice.Error(_notice, resp.Msg);
             }
-            dictList = resp.Data;
+            tenantList = resp.Data;
         }
 
         private void Delete(long id)

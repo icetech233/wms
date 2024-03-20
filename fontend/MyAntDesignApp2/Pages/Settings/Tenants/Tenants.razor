@@ -1,0 +1,34 @@
+﻿@namespace MyAntDesignApp2.Pages.Settings
+@page "/settings/tenants"
+@using MyAntDesignApp2.Models
+@using System.Text.Json
+
+@inject NotificationService _notice
+
+<GridContent Id="#main">
+
+    <Alert Message=@_PageKey Type="success" ShowIcon="true" Style="margin-bottom:8px" />
+
+    <Space Style="margin-bottom:8px"
+           Size=@size>
+        <SpaceItem>
+            <Button Color=@Color.Green4 Icon="@IconType.Outline.Reload"
+                    Type="@ButtonType.Primary"
+                    OnClick="Refresh">
+                刷新
+            </Button>
+        </SpaceItem>
+    </Space>
+
+    <Table TItem="Tenant" DataSource=@tenantList HidePagination>
+        <PropertyColumn Property="c=>c.TenantID" />
+        <PropertyColumn Property="c=>c.TenantCode" />
+        <PropertyColumn Property="c=>c.TenantName" />
+        <PropertyColumn Property="c=>c.Address" />
+        <PropertyColumn Property="c=>c.UpdatedAt" />
+    </Table>
+
+</GridContent>
+
+ @code {
+}
