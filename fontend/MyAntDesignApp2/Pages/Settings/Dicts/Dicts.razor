@@ -1,0 +1,38 @@
+﻿@namespace MyAntDesignApp2.Pages.Settings
+@page "/settings/dicts"
+@using MyAntDesignApp2.Models
+@using System.Text.Json
+
+@inject NotificationService _notice
+
+<GridContent Id="#main">
+
+    <Alert Message=@_PageKey Type="success" ShowIcon="true" Style="margin-bottom:8px" />
+
+    <Space Style="margin-bottom:8px"
+           Size=@size>
+        <SpaceItem>
+            <Button Color=@Color.Green4 Icon="@IconType.Outline.Reload"
+                    Type="@ButtonType.Primary"
+                    OnClick="Refresh">
+                刷新
+            </Button>
+        </SpaceItem>
+    </Space>
+
+    <Table TItem="Dict" DataSource=@dictList HidePagination>
+        <PropertyColumn Property="c=>c.DictID" Sortable />
+        <PropertyColumn Property="c=>c.DictName" />
+        <PropertyColumn Property="c=>c.DictValue" />
+         <PropertyColumn Property="c=>c.CreatedAt" />
+        <PropertyColumn Property="c=>c.UpdatedAt" />
+    </Table>
+
+</GridContent>
+
+
+@code{
+
+    public Dict[] dictList;
+
+}
