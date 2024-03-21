@@ -1,7 +1,7 @@
 ﻿using AntDesign;
 using System.Threading.Tasks;
 
-namespace MyAntDesignApp2
+namespace WmsApp
 {
     public class Notice
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MyAntDesignApp2.Models
+namespace WmsApp.Models
 {
     public class CommonDate {
         [DisplayName("创建时间")]

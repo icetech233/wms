@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using AntDesign;
 
-namespace MyAntDesignApp2
+namespace WmsApp
 {
     public class Program
     {

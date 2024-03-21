@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace MyAntDesignApp2.Models
+namespace WmsApp.Models
 {
     public class SpuResp : BaseResp
     {

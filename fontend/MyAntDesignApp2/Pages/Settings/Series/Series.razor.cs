@@ -6,9 +6,9 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using AntDesign;
 using Microsoft.AspNetCore.Components;
-using MyAntDesignApp2.Models;
+using WmsApp.Models;
 
-namespace MyAntDesignApp2.Pages.Settings
+namespace WmsApp.Pages.Settings
 {
 
     public partial class Series

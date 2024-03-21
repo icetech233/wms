@@ -6,13 +6,13 @@ using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
 using AntDesign;
 using Microsoft.AspNetCore.Components;
-using MyAntDesignApp2.Models;
+using WmsApp.Models;
 using System.Text.Json;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 // Microsoft.Extensions.Logging;
 
-namespace MyAntDesignApp2.Pages.Settings
+namespace WmsApp.Pages.Settings
 {
 
     public partial class Attrs

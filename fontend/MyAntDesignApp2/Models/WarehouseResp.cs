@@ -1,4 +1,4 @@
-﻿namespace MyAntDesignApp2.Models
+﻿namespace WmsApp.Models
 {
     public class WarehouseResp : BaseResp
     {

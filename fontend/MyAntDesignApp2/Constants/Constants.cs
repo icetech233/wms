@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace MyAntDesignApp2
+namespace WmsApp
 {
     public class Constants
     {

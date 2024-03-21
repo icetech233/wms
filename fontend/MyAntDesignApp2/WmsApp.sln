@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33318.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyAntDesignApp2", "MyAntDesignApp2.csproj", "{8AF52FC4-FF69-4410-AC09-72610B5827EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WmsApp", "WmsApp.csproj", "{8AF52FC4-FF69-4410-AC09-72610B5827EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

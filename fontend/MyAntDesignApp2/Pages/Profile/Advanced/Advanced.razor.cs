@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AntDesign.ProLayout; 
 using Microsoft.AspNetCore.Components;
 
-namespace MyAntDesignApp2.Pages.Profile {
+namespace WmsApp.Pages.Profile {
   public partial class Advanced {
 
 
