@@ -9,12 +9,18 @@
 
     <Alert Message=@_PageKey Type="success" ShowIcon="true" Style="margin-bottom:8px" />
 
+    <RadioGroup OnChange=@OnChangeHandle Size=@("large") @bind-Value=@bindEntType ButtonStyle=@RadioButtonStyle.Outline>
+        <Radio RadioButton Value="@("all")">全部</Radio>
+        <Radio RadioButton Value="@("supplier")">供应商</Radio>
+        <Radio RadioButton Value="@("customer")">客户</Radio>
+    </RadioGroup>
+
     <Space Style="margin-bottom:8px"
            Size=@size>
         <SpaceItem>
             <Button Color=@Color.Green4 Icon="@IconType.Outline.Reload"
                     Type="@ButtonType.Primary"
-                    OnClick="Refresh">
+                    OnClick="RefreshTableData">
                 刷新
             </Button>
         </SpaceItem>
@@ -22,13 +28,49 @@
 
     <Table TItem="Tenant" DataSource=@tenantList HidePagination>
         <PropertyColumn Property="c=>c.TenantID" />
+
+        <PropertyColumn Property="c=>c" Title="标识">
+            @{
+                if (context.IsSupplier)
+                {
+                    <Tag Color="#021a30">供应商</Tag>
+                }
+                else
+                {
+                    if (context.IsCustomer)
+                    {
+                        <Tag Color="#021a30">客户</Tag>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                }
+            }
+        </PropertyColumn>
         <PropertyColumn Property="c=>c.TenantCode" />
         <PropertyColumn Property="c=>c.TenantName" />
         <PropertyColumn Property="c=>c.Address" />
-        <PropertyColumn Property="c=>c.UpdatedAt" />
+        <PropertyColumn Property="c=>c.UpdatedAt"/>
     </Table>
 
 </GridContent>
 
- @code {
+@code {
+
+    string bindEntType = "all";
+
+    // string _bindEntType;
+    // [Parameter]
+    // public string BindEntType
+    // {
+    //     get => _bindEntType ?? "all";
+    //     set {
+    //         _bindEntType = value;
+    //         RefreshTableDataWithEntType(_bindEntType);
+    //     }
+    // }
+
+    // public EventCallback<MouseEventArgs> OnClick { get; set; }
+
 }
