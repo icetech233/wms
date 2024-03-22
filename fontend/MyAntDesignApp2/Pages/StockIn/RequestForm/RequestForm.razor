@@ -7,10 +7,57 @@
 
 <GridContent Id="#main">
     <span>申请入库</span>
+    <Row Align="top" Gutter=24>
+        <Col>
+        <div>入库单号</div>
+        </Col>
+        <Col>
+        <div>入库类型</div>
+        </Col>
+        <Col>
+        <div>入库仓库</div>
+        </Col>
+        <Col>
+        <div>供应商</div>
+        </Col>
+        <Col>
+        <div>合同号</div>
+        </Col>
+    </Row>
+    <Form TModel=@StockAddModel Model=@model>
+        <Row Align="top" Gutter=24>
+            <Col >
+                <div>入库单号</div>
+            </Col>
+            <Col>
+                <div>入库类型</div>
+            </Col>
+            <Col>
+                <div>入库仓库</div>
+            </Col>
+            <Col>
+                <div>供应商</div>
+            </Col>
+            <Col>
+                <div>合同号</div>
+            </Col>
+        </Row>
+    </Form>
 
 
 </GridContent>
 
 @code {
+
+    public class StockAddModel
+    {
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+        public bool RememberMe { get; set; } = true;
+    }
+
+    StockAddModel model = new StockAddModel();
 
 }

@@ -57,7 +57,21 @@ namespace WmsApp.Pages.Settings
             {
                 tenantAllList = resp.Data;
             }
-            tenantList = [.. tenantAllList];
+            else if ("all" == bindEntType) 
+            {
+                tenantAllList = resp.Data;
+                tenantList = [.. tenantAllList];
+            }
+            // 分割
+            if ("supplier" == bindEntType)
+            {
+                tenantList = tenantAllList.Where(a => a.IsSupplier).ToArray();
+            }
+            else if ("customer" == bindEntType)
+            {
+                tenantList = tenantAllList.Where(a => a.IsCustomer).ToArray();
+            }
+
         }
 
         private void RefreshTableDataWithEntType(string ent_type)
