@@ -5,7 +5,8 @@
 
 @inject NotificationService _notice
 
-<GridContent Id="#main">
+<GridContent>
+    <Watermark Content="帅斌">
     <Alert Message=@_PageKey Type="success" ShowIcon="true" Style="margin-bottom:8px" />
 
     <Space Style="margin-bottom:8px"
@@ -26,8 +27,7 @@
          <PropertyColumn Property="c=>c.CreatedAt" />
          <PropertyColumn Property="c=>c.UpdatedAt" />
      </Table>
-
-
+     </Watermark>
  </GridContent>
 
 

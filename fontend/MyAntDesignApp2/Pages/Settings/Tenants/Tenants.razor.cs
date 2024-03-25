@@ -57,11 +57,8 @@ namespace WmsApp.Pages.Settings
             {
                 tenantAllList = resp.Data;
             }
-            else if ("all" == bindEntType) 
-            {
-                tenantAllList = resp.Data;
-                tenantList = [.. tenantAllList];
-            }
+
+            tenantList = [.. resp.Data];
             // 分割
             if ("supplier" == bindEntType)
             {
