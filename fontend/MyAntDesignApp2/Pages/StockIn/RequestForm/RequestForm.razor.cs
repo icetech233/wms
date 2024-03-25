@@ -16,7 +16,7 @@ namespace WmsApp.Pages.StockIn
     public partial class RequestForm
     {
         private string requestFormTitle = "申请入库";
-        private StockAddModel stockModel = new StockAddModel();
+        private StockAddModel stockModel = new();
 
     }
 }

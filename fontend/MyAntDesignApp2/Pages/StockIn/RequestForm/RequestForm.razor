@@ -13,29 +13,38 @@
     <Form TModel=@StockAddModel Model=@stockModel>
         
         <Row Align="top" Gutter=24>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=4>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
                 <FormItem Label="入库单号">
-                    <Input @bind-Value="@context.StockInNumber" />
+                    <Input @bind-Value="@context.StockInNo" />
                 </FormItem>
             </Col>
             <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=4>
                 <FormItem Label="类型">
-                    <Input @bind-Value="@context.StockInType" />
+                        <Select TItem=@Warehouse TItemValue=@string DataSource=@_warehouses
+                            DefaultActiveFirstOption=true EnableSearch=true
+                            LabelName="WarehouseName" ValueName="WarehouseName"
+                            @bind-Value="@context.StockInType" 
+                            Placeholder="选择一个仓库" >
+                        </Select>
                 </FormItem>
             </Col>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=4>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
                 <FormItem Label="仓库">
-                    <Input @bind-Value="@context.StockInWarehouse" />
+                    <Select TItem=@Warehouse TItemValue=@string DataSource=@_warehouses
+                            DefaultActiveFirstOption=true EnableSearch=true
+                            LabelName="WarehouseName" ValueName="WarehouseName"
+                            @bind-Value="@context.StockInWarehouse"
+                            Placeholder="选择一个仓库" />
                 </FormItem>
             </Col>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=4>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
                 <FormItem Label="供应商">
                 <Input @bind-Value="@context.Supplier" />
                 </FormItem>
             </Col>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=4>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
                 <FormItem Label="合同号">
-                    <Input @bind-Value="@context.ContractNumber" />
+                    <Input @bind-Value="@context.ContractNo" />
                 </FormItem>
             </Col>
 
@@ -48,13 +57,28 @@
 
 @code {
 
+    string _selectedWarehouseName;
+    Warehouse _selectedWarehouse;
+    List<Warehouse> _warehouses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _warehouses = new()
+        {
+            new Warehouse(){ WarehouseID = 1, WarehouseName ="总仓库" },
+            new Warehouse(){ WarehouseID = 2, WarehouseName ="内部领用仓库" },
+            new Warehouse(){ WarehouseID = 3, WarehouseName ="展示仓库(临时)" },
+        };
+        await Console.Out.WriteAsync("OnInitializedAsync");
+    }
+
     public class StockAddModel
     {
         /// <summary>
         /// 入库单号
         /// </summary>
         [Required]
-        public string StockInNumber { get; set; }
+        public string StockInNo { get; set; }
         /// <summary>
         /// 入库类型
         /// </summary>
@@ -65,7 +89,7 @@
         [Required, Description("供应商")]
         public string Supplier { get; set; }
         [Required, Description("合同号")]
-        public string ContractNumber { get; set; }
+        public string ContractNo { get; set; }
         [Required]
         public bool RememberMe { get; set; } = true;
     }
