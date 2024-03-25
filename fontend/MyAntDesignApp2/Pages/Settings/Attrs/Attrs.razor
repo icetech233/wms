@@ -137,8 +137,8 @@
         [StringLength(10, MinimumLength = 1)]
         public string AttrName { get; set; }
 
+        // [MinLength(1, ErrorMessage = "属性值最小数量1")]
         [Required]
-        [MinLength(1, ErrorMessage = "属性值最小数量1")]
         public List<AttrValue> Val { get; set; }
     }
 
