@@ -6,14 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Components\FormTitle.razor.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Components\FormTitle.razor.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <!--<PackageReference Include="AntDesign.Charts" Version="0.5.1" />-->
 
 	<PackageReference Include="AntDesign.ProLayout" Version="0.17.3" />
