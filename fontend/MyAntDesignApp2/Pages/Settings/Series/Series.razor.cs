@@ -18,7 +18,7 @@ namespace WmsApp.Pages.Settings
         [Inject]
         public HttpClient hc { get; set; }
 
-        public List<Spu> spuList;
+        public List<Spu> spuList = new List<Spu>();
         private string[] defaultActiveKey = ["1","2"];
 
         protected override async Task OnInitializedAsync()

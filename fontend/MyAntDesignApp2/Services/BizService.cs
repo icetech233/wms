@@ -11,6 +11,7 @@ namespace WmsApp.Services
         Task<DictResp> GetDictListAsync();
         Task<WarehouseResp> GetWarehouseListAsync();
         Task<TenantResp> GetSupplierListAsync();
+        Task<TenantResp> GetCustomerListAsync();
     }
 
     public class BizService : IBizService
@@ -26,6 +27,13 @@ namespace WmsApp.Services
             string requestUri = "/api/v1/tenant/list?ent_type=supplier&s="+ Random.Shared.Next(int.MaxValue);
             return await _httpClient.GetFromJsonAsync<TenantResp>(requestUri);
         }
+
+        public async Task<TenantResp> GetCustomerListAsync()
+        {
+            string requestUri = "/api/v1/tenant/list?ent_type=customer&s=" + Random.Shared.Next(int.MaxValue);
+            return await _httpClient.GetFromJsonAsync<TenantResp>(requestUri);
+        }
+
 
         public async Task<DictResp> GetDictListAsync()
         {
