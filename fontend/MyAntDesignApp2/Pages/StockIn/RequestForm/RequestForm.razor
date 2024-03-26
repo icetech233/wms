@@ -38,7 +38,11 @@
             </Col>
             <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
                 <FormItem Label="供应商">
-                <Input @bind-Value="@context.Supplier" />
+                    <Select TItem=@Tenant TItemValue=@string DataSource=@_stockInSupplier
+                            DefaultActiveFirstOption=true EnableSearch=true
+                            LabelName="TenantName" ValueName="TenantName"
+                            @bind-Value="@context.Supplier">
+                    </Select>
                 </FormItem>
             </Col>
             <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
@@ -64,12 +68,7 @@
 </GridContent>
 
 @code {
-    private string buttonSize = "small";
-
-    // Warehouse _selectedWarehouse;
-    List<Warehouse> _warehouses;
-    // Dict _selectedStockInType;
-    List<Dict> _stockInTypes;
+    private const string buttonSize = "small";
 
     public class StockAddModel
     {

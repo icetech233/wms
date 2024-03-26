@@ -23,7 +23,7 @@ namespace WmsApp.Services
 
         public async Task<TenantResp> GetSupplierListAsync()
         {
-            string requestUri = $"/api/v1/tenant/list?ent_type=supplier&s={Random.Shared.Next(int.MaxValue)}";
+            string requestUri = "/api/v1/tenant/list?ent_type=supplier&s="+ Random.Shared.Next(int.MaxValue);
             return await _httpClient.GetFromJsonAsync<TenantResp>(requestUri);
         }
 
@@ -38,6 +38,7 @@ namespace WmsApp.Services
             string requestUri = "/api/v1/warehouse/list?s=" + Random.Shared.Next(int.MaxValue);
             return await _httpClient.GetFromJsonAsync<WarehouseResp>(requestUri);
         }
+
 
     }
 }
