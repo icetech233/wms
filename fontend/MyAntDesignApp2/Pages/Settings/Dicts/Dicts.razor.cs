@@ -24,7 +24,7 @@ namespace WmsApp.Pages.Settings
         string modalTitle = "添加仓库"; // 编辑仓库
 
         [Inject]
-        public IDictService DictSrv { get; set; }
+        public IBizService BizSrv { get; set; }
         [Inject]
         public ILocalStorageService LocalStorage { get; set; }
 
@@ -36,7 +36,7 @@ namespace WmsApp.Pages.Settings
 
         private async Task Refresh()
         {
-            DictResp resp = await DictSrv.GetDictListAsync();
+            DictResp resp = await BizSrv.GetDictListAsync();
             Console.WriteLine($"refresh code {resp.Code} count {resp.Data?.Length}");
             if (resp.Code != 200)
             {

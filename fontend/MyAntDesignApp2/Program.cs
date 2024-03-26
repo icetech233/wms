@@ -28,6 +28,7 @@ namespace WmsApp
             builder.Services.AddAntDesign();
             builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSettings"));
             //builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IBizService, BizService>();
             builder.Services.AddScoped<IDictService, DictService>();
             await builder.Build().RunAsync();
         }
