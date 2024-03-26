@@ -20,11 +20,10 @@
             </Col>
             <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=4>
                 <FormItem Label="类型">
-                        <Select TItem=@Warehouse TItemValue=@string DataSource=@_warehouses
+                        <Select TItem=@Dict TItemValue=@string DataSource=@_stockInTypes
                             DefaultActiveFirstOption=true EnableSearch=true
-                            LabelName="WarehouseName" ValueName="WarehouseName"
-                            @bind-Value="@context.StockInType" 
-                            Placeholder="选择一个仓库" >
+                        LabelName="DictValue" ValueName="DictValue"
+                        @bind-Value="@context.StockInType">
                         </Select>
                 </FormItem>
             </Col>
@@ -47,30 +46,30 @@
                     <Input @bind-Value="@context.ContractNo" />
                 </FormItem>
             </Col>
-
         </Row>
     </Form>
+    <WmsApp.FormTitle CurrentFormTitle="网关入库明细" />
 
-    <Divider/>
+    @* "small"; *@
+    <Space Style="margin-bottom:12px"
+           Size=@("large")>
+        <SpaceItem>
+            <Button Size=@buttonSize Icon="@IconType.Outline.Import"
+                Type="@ButtonType.Primary">导入</Button>
+            <Button Size=@buttonSize Icon="@IconType.Outline.CloudDownload"
+                Type="@ButtonType.Default">下载模板</Button>
+        </SpaceItem>
+    </Space>
 
 </GridContent>
 
 @code {
+    private string buttonSize = "small";
 
-    string _selectedWarehouseName;
-    Warehouse _selectedWarehouse;
+    // Warehouse _selectedWarehouse;
     List<Warehouse> _warehouses;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _warehouses = new()
-        {
-            new Warehouse(){ WarehouseID = 1, WarehouseName ="总仓库" },
-            new Warehouse(){ WarehouseID = 2, WarehouseName ="内部领用仓库" },
-            new Warehouse(){ WarehouseID = 3, WarehouseName ="展示仓库(临时)" },
-        };
-        await Console.Out.WriteAsync("OnInitializedAsync");
-    }
+    // Dict _selectedStockInType;
+    List<Dict> _stockInTypes;
 
     public class StockAddModel
     {

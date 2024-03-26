@@ -9,6 +9,7 @@ namespace WmsApp.Services
     public interface IBizService
     {
         Task<DictResp> GetDictListAsync();
+        Task<WarehouseResp> GetWarehouseListAsync();
     }
 
     public class BizService : IBizService
@@ -24,5 +25,12 @@ namespace WmsApp.Services
             string requestUri = "/api/v1/dict/list?s=" + Random.Shared.Next(int.MaxValue);
             return await _httpClient.GetFromJsonAsync<DictResp>(requestUri);
         }
+
+        public async Task<WarehouseResp> GetWarehouseListAsync()
+        {
+            string requestUri = "/api/v1/warehouse/list?s=" + Random.Shared.Next(int.MaxValue);
+            return await _httpClient.GetFromJsonAsync<WarehouseResp>(requestUri);
+        }
+
     }
 }

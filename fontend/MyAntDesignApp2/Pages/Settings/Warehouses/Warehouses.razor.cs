@@ -10,6 +10,7 @@ using AntDesign;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using WmsApp.Models;
+using WmsApp.Services;
 
 namespace WmsApp.Pages.Settings
 {
@@ -85,12 +86,12 @@ namespace WmsApp.Pages.Settings
 
             _visible = true;
         }
-
+        [Inject]
+        public IBizService BizSrv { get; set; }
 
         private async Task Refresh()
         {
-            string requestUri = "/api/v1/warehouse/list?s=" + Random.Shared.Next(int.MaxValue);
-            WarehouseResp resp = await hc.GetFromJsonAsync<WarehouseResp>(requestUri);
+            WarehouseResp resp = await BizSrv.GetWarehouseListAsync();
             Console.WriteLine($"refresh code {resp.Code} count {resp.Data?.Length}");
             if (resp.Code != 200)
             {
