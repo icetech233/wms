@@ -42,7 +42,6 @@ namespace WmsApp.Pages.StockIn
             _warehouses = warehouseResp.Data.ToList();
             _stockInSupplier = supplierResp.Data.ToList();
 
-            await Console.Out.WriteAsync("OnInitializedAsync");
         }
 
     }
