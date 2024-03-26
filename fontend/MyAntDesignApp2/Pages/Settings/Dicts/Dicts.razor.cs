@@ -9,7 +9,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AntDesign;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using WmsApp.Models;
+using WmsApp.Services;
+using Blazored.LocalStorage;
 
 namespace WmsApp.Pages.Settings
 {
@@ -21,32 +24,27 @@ namespace WmsApp.Pages.Settings
         string modalTitle = "添加仓库"; // 编辑仓库
 
         [Inject]
-        public HttpClient hc { get; set; }
+        public IDictService DictSrv { get; set; }
+        [Inject]
+        public ILocalStorageService LocalStorage { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            // logger.LogWarning("OnInitializedAsync has clicked me!");
             await base.OnInitializedAsync();
-
             await Refresh();
-        }
-
-        private TenantModel model = new();
-        public class TenantModel
-        {
-
         }
 
         private async Task Refresh()
         {
-            string requestUri = "/api/v1/dict/list?s=" + Random.Shared.Next(int.MaxValue);
-            DictResp resp = await hc.GetFromJsonAsync<DictResp>(requestUri);
+            DictResp resp = await DictSrv.GetDictListAsync();
             Console.WriteLine($"refresh code {resp.Code} count {resp.Data?.Length}");
             if (resp.Code != 200)
             {
                 await Notice.Error(_notice, resp.Msg);
             }
+            //
             dictList = resp.Data;
+            await LocalStorage.SetItemAsync("dict_context", dictList);
         }
 
         private void Delete(long id)
