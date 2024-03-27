@@ -26,9 +26,8 @@
          </SpaceItem>
      </Space>
 
-     <Table TItem="Tenant" DataSource=@tenantList
-            PaginationPosition="bottomRight">
-
+     <Table TItem="Tenant" DataSource=@tenantList 
+            PageIndex=@_pageIndex PageSize=@_pageSize>
          <ChildContent>
              <PropertyColumn Property="c=>c.TenantID" />
 
@@ -66,7 +65,6 @@
  </GridContent>
 
  @code {
-    string bindEntType = "all";
 
     // string _bindEntType;
     // [Parameter]
@@ -78,5 +76,4 @@
     //         RefreshTableDataWithEntType(_bindEntType);
     //     }
     // }
-
 }

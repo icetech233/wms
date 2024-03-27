@@ -16,7 +16,11 @@ namespace WmsApp.Pages.Settings
     public partial class Tenants
     {
         const string _PageKey = "企业信息:";
-        string size = "middle";
+        const string size = "middle";
+        string bindEntType = "all";
+        int _pageIndex = 1;
+        int _pageSize = 5;
+
         bool _visible = false;
         string modalTitle = "添加"; // 编辑
 
