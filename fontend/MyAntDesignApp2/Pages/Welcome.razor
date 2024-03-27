@@ -7,15 +7,147 @@
                    Type="warning"
                    ShowIcon=@(true)
                    Banner
-                   Style="margin: -12px; margin-bottom: 24px" />
-        </Body>
-    </Card>
+                    Style="margin: -12px; margin-bottom: 24px" />
+         </Body>
+     </Card>
+
+
+     <Table DataSource="skuStockList" TItem="StockItem" RowClassName="@(_=>"editable-row")"
+           Bordered TableLayout="fixed">
+
+         @*      <PropertyColumn Property="c=>c.Id" Width="60" Fixed="left" />
+        *@
+         <Column TData="string" Title="型号">
+             @if (!editCache[context.Id].edit)
+            {
+                @context.SkuType
+            }
+            else
+            {
+                <Input @bind-Value="editCache[context.Id].data.SkuType" />
+            }
+        </Column>
+        <Column TData="string" Title="Mac地址">
+            @if (!editCache[context.Id].edit)
+            {
+                @context.Mac
+            }
+            else
+            {
+                <Input @bind-Value="editCache[context.Id].data.Mac" />
+            }
+        </Column>
+        <Column TData="string" Title="Iccid号">
+            @if (!editCache[context.Id].edit)
+            {
+                @context.Iccid
+            }
+            else
+            {
+                <Input @bind-Value="editCache[context.Id].data.Iccid" />
+            }
+        </Column>
+        <ActionColumn Title="操作">
+            @if (!editCache[context.Id].edit)
+            {
+                <Button Size=@("default") OnClick="() => startEdit(context.Id)" Style=@("margin-right: 8px;")
+                        Icon="@IconType.Outline.Edit"></Button>
+
+                <Button Size=@("default") OnClick="() => deleteItem(context.Id)"
+                        Icon="@IconType.Fill.Delete"
+                    Danger Type="@ButtonType.Primary"></Button>
+            }
+            else
+            {
+                <Button Size=@("default") OnClick="() => saveEdit(context.Id)" Style=@("margin-right: 8px;")
+                        Icon="@IconType.Outline.Save">
+                    保存
+                </Button>
+
+                <Button Size=@("default") OnClick="() => cancelEdit(context.Id)" Style=@("margin-right: 8px;")
+                        Icon="@IconType.Outline.CloseCircle">
+                    取消
+                </Button>
+            }
+        </ActionColumn>
+
+    </Table>
+
+    <style>
+        .save {
+            margin-right: 8px;
+        }
+    </style>
+
 </GridContent>
+
+
 
 @code {
 
-    [Parameter]
-    public RenderFragment CoverContent { set; get; }
+    private const string buttonSize = "small";
+
+    record StockItem
+    {
+        public int Id { get; set; }
+        public string SkuType { get; set; }
+        public string Mac { get; set; }
+        public string Iccid { get; set; }
+    };
+
+    IDictionary<int, (bool edit, StockItem data)> editCache = new Dictionary<int, (bool edit, StockItem data)>();
+    List<StockItem> skuStockList = new();
+
+    // int i = 0;
+    // string editId;
+
+    void startEdit(int id)
+    {
+        (bool edit, StockItem data) editData = editCache[id];
+        editCache[id] = (true, editData.data with { }); // add a copy in cache
+    }
+
+    void deleteItem(int id)
+    {
+        int index = skuStockList.FindIndex(item => item.Id == id);
+        skuStockList.RemoveAt(index);
+        editCache.Remove(id);
+    }
+
+    void cancelEdit(int id)
+    {
+        StockItem data = skuStockList.FirstOrDefault(item => item.Id == id);
+        editCache[id] = (false, data); // recovery
+    }
+
+    void saveEdit(int id)
+    {
+        int index = skuStockList.FindIndex(item => item.Id == id);
+        skuStockList[index] = editCache[id].data; // apply the copy to data source
+        editCache[id] = (false, skuStockList[index]); // don't affect rows in editing
+    }
+
+    protected override void OnInitialized()
+    {
+        // 数据
+        skuStockList = Enumerable.Range(0, 100)
+        .Select(i => new StockItem
+                {
+                    Id = i + 1,
+                    SkuType = $"IIG3000-4G",
+                    Mac = "99:50:AA:AA:05:01",
+                    Iccid = "89860463112070018782"
+                }).ToList();
+        // 初始化
+        skuStockList.ForEach(item =>
+        {
+            editCache[item.Id] = (false, item);
+        });
+    }
+
+    //FooterTemplate
+    RenderFragment footerTemplate = @<span><Icon Type="environment" /> 尾部</span>;
+
+
 
 }
-                
