@@ -29,7 +29,8 @@
         </SpaceItem>
     </Space>
 
-    <Table TItem="Attr" DataSource="@attrList" HidePagination>
+    <Table TItem="Attr" DataSource="@attrList" 
+        PaginationPosition="bottomRight">
         <Column Title="属性ID" @bind-Field="@context.AttrID" Sortable />
          <Column Title="属性名称" @bind-Field="@context.AttrName" />
 
