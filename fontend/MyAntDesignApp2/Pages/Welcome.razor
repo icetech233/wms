@@ -13,10 +13,12 @@
 
 
      <Table DataSource="skuStockList" TItem="StockItem" RowClassName="@(_=>"editable-row")"
-           Bordered TableLayout="fixed">
+           Bordered 
+           FooterTemplate=@footerTemplate(addItem)>
 
-         @*      <PropertyColumn Property="c=>c.Id" Width="60" Fixed="left" />
-        *@
+         <PropertyColumn Title="Id" Property="c=>c.Id" Width="50" Fixed="left">
+             <span>@context.Id</span>
+         </PropertyColumn>
          <Column TData="string" Title="型号">
              @if (!editCache[context.Id].edit)
             {
@@ -74,9 +76,7 @@
     </Table>
 
     <style>
-        .save {
-            margin-right: 8px;
-        }
+
     </style>
 
 </GridContent>
@@ -95,7 +95,7 @@
         public string Iccid { get; set; }
     };
 
-    IDictionary<int, (bool edit, StockItem data)> editCache = new Dictionary<int, (bool edit, StockItem data)>();
+    Dictionary<int, (bool edit, StockItem data)> editCache = new Dictionary<int, (bool edit, StockItem data)>();
     List<StockItem> skuStockList = new();
 
     // int i = 0;
@@ -130,11 +130,11 @@
     protected override void OnInitialized()
     {
         // 数据
-        skuStockList = Enumerable.Range(0, 100)
+        skuStockList = Enumerable.Range(0, 6)
         .Select(i => new StockItem
                 {
                     Id = i + 1,
-                    SkuType = $"IIG3000-4G",
+                    SkuType = "IIG3000-4G",
                     Mac = "99:50:AA:AA:05:01",
                     Iccid = "89860463112070018782"
                 }).ToList();
@@ -145,9 +145,20 @@
         });
     }
 
-    //FooterTemplate
-    RenderFragment footerTemplate = @<span><Icon Type="environment" /> 尾部</span>;
+    void addItem()
+    {
+        int lastSkuId = skuStockList.Last().Id;
+        StockItem item = new StockItem
+        {
+            Id = lastSkuId + 1,
+            SkuType = "IIG3000-4G",
+            Mac = "99:99:AA:00:00:00",
+            Iccid = "89860463112070018782"
+        };
+        editCache[item.Id] = (true, item);
+        skuStockList.Add(item);
+    }
 
-
+    RenderFragment footerTemplate(Action clickA) => @<Button Type="primary" OnClick=clickA>添加一行数据</Button>;
 
 }
