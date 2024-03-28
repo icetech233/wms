@@ -2,9 +2,10 @@
 
 namespace WmsApp.Models
 {
-    public class SpuResp : BaseResp
+    public class SimplySkuResp : BaseResp
     {
         public object Debug { get; set; }
-        public List<Spu> Data { get; set; }
+        public List<SimplySku> Data { get; set; }
     }
+
 }

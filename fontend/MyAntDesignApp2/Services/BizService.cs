@@ -47,6 +47,9 @@ namespace WmsApp.Services
             return await _httpClient.GetFromJsonAsync<WarehouseResp>(requestUri);
         }
 
+        // /api/v1/sku/list
+
+
 
     }
 }
