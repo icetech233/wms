@@ -54,21 +54,143 @@
     </Form>
     <WmsApp.FormTitle CurrentFormTitle="网关入库明细" />
 
-    @* "small"; *@
-    <Space Style="margin-bottom:12px"
-           Size=@("large")>
+    @* *@
+    <Space Style="margin-bottom:12px" Size=@("large")>
         <SpaceItem>
-            <Button Size=@buttonSize Icon="@IconType.Outline.Import"
-                Type="@ButtonType.Primary">导入</Button>
-            <Button Size=@buttonSize Icon="@IconType.Outline.CloudDownload"
-                Type="@ButtonType.Default">下载模板</Button>
+            <Button Size=@buttonSize Icon=@("import") Type="primary">导入</Button>
+            <Button Size=@buttonSize Icon=@("cloud-download")
+                    Type="default" OnClick="DownloadTemplate">
+                下载模板
+            </Button>
         </SpaceItem>
     </Space>
+    @* table *@
+    <Table DataSource="skuStockList" TItem="StockItem" RowClassName="@(_=>"editable-row")"
+           Bordered @bind-PageIndex=@_pageIndex @bind-PageSize=@_pageSize @ref=_table
+           FooterTemplate=@footerTemplate(addItem)>
 
+         <PropertyColumn Title="Id" Property="c=>c.Id" Width="50" Fixed="left">
+             <span>@context.Id</span>
+        </PropertyColumn>
+        <Column TData="string" Title="型号">
+            @if (!editCache[context.Id].edit)
+            {
+                @context.SkuType
+            }
+            else
+            {
+                @* <Input @bind-Value="editCache[context.Id].data.SkuType"/>*@
+                <Select TItem=@SimplySku TItemValue=@string DataSource=@_skuList
+                        DefaultActiveFirstOption=true EnableSearch=true
+                        LabelName="SkuCode" ValueName="SkuCode"
+                        @bind-Value="editCache[context.Id].data.SkuType">
+                </Select>
+            }
+        </Column>
+        <Column TData="string" Title="Mac地址">
+            @if (!editCache[context.Id].edit)
+            {
+                @context.Mac
+            }
+            else
+            {
+                <Input @bind-Value="editCache[context.Id].data.Mac" />
+            }
+        </Column>
+        <Column TData="string" Title="Iccid号">
+            @if (!editCache[context.Id].edit)
+            {
+                @context.Iccid
+            }
+            else
+            {
+                <Input @bind-Value="editCache[context.Id].data.Iccid" />
+            }
+        </Column>
+        <ActionColumn Title="操作">
+            @if (!editCache[context.Id].edit)
+            {
+                <Button Size=@("default") OnClick="() => startEdit(context.Id)" Style=@("margin-right: 8px;")
+                        Icon="@IconType.Outline.Edit"></Button>
+
+                <Button Size=@("default") OnClick="() => deleteItem(context.Id)"
+                        Icon="@IconType.Fill.Delete"
+                    Danger Type="@ButtonType.Primary"></Button>
+            }
+            else
+            {
+                <Button Size=@("default") OnClick="() => saveEdit(context.Id)" Style=@("margin-right: 8px;")
+                        Icon="@IconType.Outline.Save">
+                    保存
+                </Button>
+
+                <Button Size=@("default") OnClick="() => cancelEdit(context.Id)" Style=@("margin-right: 8px;")
+                        Icon="@IconType.Outline.CloseCircle">
+                    取消
+                </Button>
+            }
+        </ActionColumn>
+
+    </Table>
+
+    <div>
+        <div>
+            <span>本次入库总量: @(skuStockList.Count)</span>
+        </div>
+
+        @if (skuStockList.Count>0) {
+            foreach (var tmp in skuStockList.GroupBy(x => x.SkuType))
+            {
+                <div>
+                    <span>@(tmp.Key)</span><span>数量:</span><span>@(tmp.Count())</span>
+                </div>
+            }
+        }
+    </div>
+
+    <WmsApp.FormTitle CurrentFormTitle="入库确认" />
+    <Form TModel=@StockAddModel Model=@stockModel>
+        <Row Align="top" Gutter=24>
+            <Col Xs=24 Sm=12 Md=6 Lg=6 Xl=6>
+                <FormItem Label="入库时间">
+                <DatePicker Format="yyyy-MM-dd hh:mm:ss" ShowTime=true @bind-Value=@context.InTime />
+                </FormItem>
+            </Col>
+            <Col Xs=24 Sm=12 Md=6 Lg=6 Xl=6>
+                <FormItem Label="入库人员">
+                    <Input @bind-Value="@context.Staff" />
+                </FormItem>
+            </Col>
+            <Col Xs=24 Sm=12 Md=6 Lg=6 Xl=6>
+                <FormItem Label="审核人员">
+                    <Input @bind-Value="@context.Reviewer" />
+                </FormItem>
+            </Col>
+        </Row>
+    </Form>
 </GridContent>
 
+<style>
+    .btn-add {
+        display: block;
+        margin: 0px 0px;
+        width: 100%;
+    }
+
+    .ant-table-footer {
+        padding: 4px 4px !important;
+    }
+</style>
+@inject NavigationManager _navigationManager
 @code {
-    private const string buttonSize = "small";
+
+
+    void T1()
+    {
+        var aa = skuStockList.GroupBy(x => x.SkuType).ToList();
+    }
+
+    RenderFragment footerTemplate(Action clickA) => @<Button Class="btn-add" Icon=@IconType.Fill.PlusSquare OnClick=clickA>添加一行数据</Button>;
 
     public class StockAddModel
     {
@@ -77,9 +199,7 @@
         /// </summary>
         [Required]
         public string StockInNo { get; set; }
-        /// <summary>
-        /// 入库类型
-        /// </summary>
+
         [Required, Description("入库类型")]
         public string StockInType { get; set; }
         [Required, Description("入库仓库")]
@@ -88,8 +208,21 @@
         public string Supplier { get; set; }
         [Required, Description("合同号")]
         public string ContractNo { get; set; }
-        [Required]
-        public bool RememberMe { get; set; } = true;
+
+        [Description("入库时间")]
+        public DateTime InTime { get; set; } = DateTime.Now;
+        public string StockInTime
+        {
+            get { return InTime.ToString("yyyy-MM-dd hh:mm:ss"); }
+        }
+
+        [Description("入库人员")]
+        public string Staff { get; set; }
+        [Description("审核人员")]
+        public string Reviewer { get; set; }
+
+        // [Required]
+        // public bool IsSure { get; set; } = false;
     }
 
 }

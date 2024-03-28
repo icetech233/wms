@@ -1,0 +1,9 @@
+﻿.btn-add {
+    display: block;
+    margin: 0px 0px;
+    width: 100%;
+}
+
+.ant-table-footer {
+    padding: 4px 4px !important;
+}
