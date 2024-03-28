@@ -29,6 +29,7 @@ namespace WmsApp.Pages.StockIn
         List<Dict> _stockInTypes;
         List<Tenant> _stockInSupplier;
         List<SimplySku> _skuList;
+        List<string> _personList = ["鄢丽媛", "王正", "韩斌"];
 
         Table<StockItem> _table;
 
@@ -64,40 +65,40 @@ namespace WmsApp.Pages.StockIn
 
         }
 
-        void startEdit(int id)
+        void StartEdit(int id)
         {
             (bool edit, StockItem data) editData = editCache[id];
             editCache[id] = (true, editData.data with { }); // add a copy in cache
         }
 
-        void deleteItem(int id)
+        void DeleteItem(int id)
         {
             int index = skuStockList.FindIndex(item => item.Id == id);
             skuStockList.RemoveAt(index);
             editCache.Remove(id);
         }
 
-        void cancelEdit(int id)
+        void CancelEdit(int id)
         {
             StockItem data = skuStockList.FirstOrDefault(item => item.Id == id);
             editCache[id] = (false, data); // 恢复 recovery
         }
 
-        void saveEdit(int id)
+        void SaveEdit(int id)
         {
             int index = skuStockList.FindIndex(item => item.Id == id);
             skuStockList[index] = editCache[id].data; // apply the copy to data source
             editCache[id] = (false, skuStockList[index]); // don't affect rows in editing
         }
 
-        void addItem()
+        void AddItem()
         {
             int lastSkuId = 0;
             if (skuStockList.Count > 0)
             {
                 lastSkuId = skuStockList.Last().Id;
             }
-            StockItem item = new StockItem
+            StockItem item = new()
             {
                 Id = lastSkuId + 1,
                 SkuType = "IIG3000-4G",

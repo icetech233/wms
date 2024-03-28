@@ -1,5 +1,6 @@
 ﻿@namespace WmsApp.Pages.StockIn
 @page "/stockin/requestform"
+@using System.Text.Json.Serialization
 @using WmsApp.Models
 @using System.Text.Json
 
@@ -55,21 +56,22 @@
     <WmsApp.FormTitle CurrentFormTitle="网关入库明细" />
 
     @* *@
-    <Space Style="margin-bottom:12px" Size=@("large")>
+    <Space Style="margin-bottom:12px">
         <SpaceItem>
             <Button Size=@buttonSize Icon=@("import") Type="primary">导入</Button>
+        </SpaceItem>
+        <SpaceItem>
             <Button Size=@buttonSize Icon=@("cloud-download")
-                    Type="default" OnClick="DownloadTemplate">
-                下载模板
+                    Type="default" OnClick="DownloadTemplate">下载模板
             </Button>
         </SpaceItem>
     </Space>
     @* table *@
     <Table DataSource="skuStockList" TItem="StockItem" RowClassName="@(_=>"editable-row")"
            Bordered @bind-PageIndex=@_pageIndex @bind-PageSize=@_pageSize @ref=_table
-           FooterTemplate=@footerTemplate(addItem)>
+           FooterTemplate=@footerTemplate(AddItem)>
 
-         <PropertyColumn Title="Id" Property="c=>c.Id" Width="50" Fixed="left">
+        <PropertyColumn Title="Id" Property="c=>c.Id" Width="50" Fixed="left">
              <span>@context.Id</span>
         </PropertyColumn>
         <Column TData="string" Title="型号">
@@ -110,21 +112,21 @@
         <ActionColumn Title="操作">
             @if (!editCache[context.Id].edit)
             {
-                <Button Size=@("default") OnClick="() => startEdit(context.Id)" Style=@("margin-right: 8px;")
+                <Button Size=@("default") OnClick="() => StartEdit(context.Id)" Style=@("margin-right: 8px;")
                         Icon="@IconType.Outline.Edit"></Button>
 
-                <Button Size=@("default") OnClick="() => deleteItem(context.Id)"
+                <Button Size=@("default") OnClick="() => DeleteItem(context.Id)"
                         Icon="@IconType.Fill.Delete"
                     Danger Type="@ButtonType.Primary"></Button>
             }
             else
             {
-                <Button Size=@("default") OnClick="() => saveEdit(context.Id)" Style=@("margin-right: 8px;")
+                <Button Size=@("default") OnClick="() => SaveEdit(context.Id)" Style=@Constants.mr2
                         Icon="@IconType.Outline.Save">
                     保存
                 </Button>
 
-                <Button Size=@("default") OnClick="() => cancelEdit(context.Id)" Style=@("margin-right: 8px;")
+                <Button Size=@("default") OnClick="() => CancelEdit(context.Id)" Style=@Constants.mr2
                         Icon="@IconType.Outline.CloseCircle">
                     取消
                 </Button>
@@ -138,34 +140,46 @@
             <span>本次入库总量: @(skuStockList.Count)</span>
         </div>
 
-        @if (skuStockList.Count>0) {
-            foreach (var tmp in skuStockList.GroupBy(x => x.SkuType))
+        @if (skuStockList.Count > 0) {
+            <Space Wrap>
+            @foreach (var tmp in skuStockList.GroupBy(x => x.SkuType))
             {
-                <div>
+                <SpaceItem>
                     <span>@(tmp.Key)</span><span>数量:</span><span>@(tmp.Count())</span>
-                </div>
+                </SpaceItem>
             }
+            </Space>
         }
     </div>
 
     <WmsApp.FormTitle CurrentFormTitle="入库确认" />
-    <Form TModel=@StockAddModel Model=@stockModel>
+    <Form TModel=@StockAddModel Model=@stockModel
+          OnFinish=OnFinish OnFinishFailed=OnFinishFailed>
+
         <Row Align="top" Gutter=24>
             <Col Xs=24 Sm=12 Md=6 Lg=6 Xl=6>
                 <FormItem Label="入库时间">
-                <DatePicker Format="yyyy-MM-dd hh:mm:ss" ShowTime=true @bind-Value=@context.InTime />
+                    <DatePicker Format="yyyy-MM-dd hh:mm:ss" ShowTime=true @bind-Value=@context.InTime />
                 </FormItem>
             </Col>
             <Col Xs=24 Sm=12 Md=6 Lg=6 Xl=6>
                 <FormItem Label="入库人员">
-                    <Input @bind-Value="@context.Staff" />
+                    <Select TItem=@string TItemValue=@string DataSource=@_personList
+                                DefaultActiveFirstOption=true EnableSearch=true
+                                @bind-Value="@context.Staff">
+                    </Select>
                 </FormItem>
             </Col>
             <Col Xs=24 Sm=12 Md=6 Lg=6 Xl=6>
                 <FormItem Label="审核人员">
-                    <Input @bind-Value="@context.Reviewer" />
+                     <Select TItem=@string TItemValue=@string DataSource=@_personList
+                            DefaultActiveFirstOption=true EnableSearch=true
+                        @bind-Value="@context.Reviewer" />
                 </FormItem>
             </Col>
+        </Row>
+        <Row>
+            <Button Type=@ButtonType.Primary HtmlType="submit">提交</Button>
         </Row>
     </Form>
 </GridContent>
@@ -181,15 +195,16 @@
         padding: 4px 4px !important;
     }
 </style>
-@inject NavigationManager _navigationManager
+
 @code {
-
-
-    void T1()
+    private void OnFinish(EditContext editContext)
     {
-        var aa = skuStockList.GroupBy(x => x.SkuType).ToList();
+        Console.WriteLine($"OnFinish {JsonSerializer.Serialize(stockModel)}");
     }
-
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine("Failed");
+    }
     RenderFragment footerTemplate(Action clickA) => @<Button Class="btn-add" Icon=@IconType.Fill.PlusSquare OnClick=clickA>添加一行数据</Button>;
 
     public class StockAddModel
@@ -208,7 +223,7 @@
         public string Supplier { get; set; }
         [Required, Description("合同号")]
         public string ContractNo { get; set; }
-
+        [JsonIgnore]
         [Description("入库时间")]
         public DateTime InTime { get; set; } = DateTime.Now;
         public string StockInTime
@@ -216,9 +231,9 @@
             get { return InTime.ToString("yyyy-MM-dd hh:mm:ss"); }
         }
 
-        [Description("入库人员")]
+        [Required, Description("入库人员")]
         public string Staff { get; set; }
-        [Description("审核人员")]
+        [Required, Description("审核人员")]
         public string Reviewer { get; set; }
 
         // [Required]
