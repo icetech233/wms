@@ -12,6 +12,7 @@ namespace WmsApp.Services
         Task<WarehouseResp> GetWarehouseListAsync();
         Task<TenantResp> GetSupplierListAsync();
         Task<TenantResp> GetCustomerListAsync();
+        Task<SimplySkuResp> GetSkuListAsync();
     }
 
     public class BizService : IBizService
@@ -47,9 +48,11 @@ namespace WmsApp.Services
             return await _httpClient.GetFromJsonAsync<WarehouseResp>(requestUri);
         }
 
-        // /api/v1/sku/list
-
-
+        public async Task<SimplySkuResp> GetSkuListAsync()
+        {
+            string requestUri = "/api/v1/sku/list?s=" + Random.Shared.Next(int.MaxValue);
+            return await _httpClient.GetFromJsonAsync<SimplySkuResp>(requestUri);
+        }
 
     }
 }

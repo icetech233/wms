@@ -1,4 +1,8 @@
 ﻿@page "/"
+@using WmsApp.Services
+@using WmsApp.Models
+
+@inject IBizService bizSrv
 
 <GridContent>
     <Card>
@@ -13,19 +17,24 @@
 
      <Table DataSource="skuStockList" TItem="StockItem" RowClassName="@(_=>"editable-row")"
            Bordered @bind-PageIndex=@_pageIndex @bind-PageSize=@_pageSize @ref=_table
-           FooterTemplate=@footerTemplate(addItem)>
+            FooterTemplate=@footerTemplate(addItem)>
 
          <PropertyColumn Title="Id" Property="c=>c.Id" Width="50" Fixed="left">
              <span>@context.Id</span>
-         </PropertyColumn>
-         <Column TData="string" Title="型号">
-             @if (!editCache[context.Id].edit)
+        </PropertyColumn>
+        <Column TData="string" Title="型号">
+            @if (!editCache[context.Id].edit)
             {
                 @context.SkuType
             }
             else
             {
-                <Input @bind-Value="editCache[context.Id].data.SkuType" />
+                @* <Input @bind-Value="editCache[context.Id].data.SkuType"/>*@
+                <Select TItem=@SimplySku TItemValue=@string DataSource=@_skuList
+                        DefaultActiveFirstOption=true EnableSearch=true
+                        LabelName="SkuCode" ValueName="SkuCode"
+                        @bind-Value="editCache[context.Id].data.SkuType">
+                </Select>
             }
         </Column>
         <Column TData="string" Title="Mac地址">
@@ -75,7 +84,7 @@
     </Table>
 
     <style>
-        .btn-add{
+        .btn-add {
             display: block;
             margin: 0px 0px;
             width: 100%;
@@ -94,6 +103,10 @@
     int _pageIndex = 1;
     int _pageSize = 5;
 
+    List<SimplySku> _skuList;
+    Dictionary<int, (bool edit, StockItem data)> editCache = new Dictionary<int, (bool edit, StockItem data)>();
+    List<StockItem> skuStockList = new();
+
     record StockItem
     {
         public int Id { get; set; }
@@ -101,9 +114,6 @@
         public string Mac { get; set; }
         public string Iccid { get; set; }
     };
-
-    Dictionary<int, (bool edit, StockItem data)> editCache = new Dictionary<int, (bool edit, StockItem data)>();
-    List<StockItem> skuStockList = new();
 
     void startEdit(int id)
     {
@@ -131,11 +141,13 @@
         editCache[id] = (false, skuStockList[index]); // don't affect rows in editing
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+        var skuResp = await bizSrv.GetSkuListAsync();
+
         // 数据
-        skuStockList = Enumerable.Range(0, 120)
-        .Select(i => new StockItem
+        skuStockList = Enumerable.Range(0, 120).Select(i => new StockItem
                 {
                     Id = i + 1,
                     SkuType = "IIG3000-4G",
@@ -144,24 +156,26 @@
                 }).ToList();
         // 初始化
         skuStockList.ForEach(item =>
-        {
-            editCache[item.Id] = (false, item);
-        });
+    {
+        editCache[item.Id] = (false, item);
+    });
+        //
+        _skuList = skuResp.Data;
     }
 
     void addItem()
     {
         int lastSkuId = skuStockList.Last().Id;
         StockItem item = new StockItem
-        {
-            Id = lastSkuId + 1,
-            SkuType = "IIG3000-4G",
-            Mac = "00:00:00:00:00:00",
-            Iccid = "00000000000000000"
-        };
+                {
+                    Id = lastSkuId + 1,
+                    SkuType = "IIG3000-4G",
+                    Mac = "00:00:00:00:00:00",
+                    Iccid = "00000000000000000"
+                };
         editCache[item.Id] = (true, item);
         skuStockList.Add(item);
-        // 
+        //
         int _total = skuStockList.Count;
         _pageIndex = _total % _pageSize == 0 ? _total / _pageSize : (_total / _pageSize) + 1;
         // _table.SelectAll();
