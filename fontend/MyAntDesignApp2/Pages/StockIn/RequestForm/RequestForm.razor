@@ -7,52 +7,6 @@
 @inject NotificationService _notice
 
 <GridContent Id="#main">
-    @* 申请入库 *@
-    <WmsApp.FormTitle CurrentFormTitle=@requestFormTitle />
-
-    @* 申请入库表单 *@
-    <Form TModel=@StockAddModel Model=@stockModel>
-        
-        <Row Align="top" Gutter=24>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
-                <FormItem Label="入库单号">
-                    <Input @bind-Value="@context.StockInNo" />
-                </FormItem>
-            </Col>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=4>
-                <FormItem Label="类型">
-                        <Select TItem=@Dict TItemValue=@string DataSource=@_stockInTypes
-                            DefaultActiveFirstOption=true EnableSearch=true
-                        LabelName="DictValue" ValueName="DictValue"
-                        @bind-Value="@context.StockInType">
-                        </Select>
-                </FormItem>
-            </Col>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
-                <FormItem Label="仓库">
-                    <Select TItem=@Warehouse TItemValue=@string DataSource=@_warehouses
-                            DefaultActiveFirstOption=true EnableSearch=true
-                            LabelName="WarehouseName" ValueName="WarehouseName"
-                            @bind-Value="@context.StockInWarehouse"
-                            Placeholder="选择一个仓库" />
-                </FormItem>
-            </Col>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
-                <FormItem Label="供应商">
-                    <Select TItem=@Tenant TItemValue=@string DataSource=@_stockInSupplier
-                            DefaultActiveFirstOption=true EnableSearch=true
-                            LabelName="TenantName" ValueName="TenantName"
-                            @bind-Value="@context.Supplier">
-                    </Select>
-                </FormItem>
-            </Col>
-            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
-                <FormItem Label="合同号">
-                    <Input @bind-Value="@context.ContractNo" />
-                </FormItem>
-            </Col>
-        </Row>
-    </Form>
     <WmsApp.FormTitle CurrentFormTitle="网关入库明细" />
 
     @* *@
@@ -135,26 +89,71 @@
 
     </Table>
 
+    <WmsApp.FormTitle CurrentFormTitle="入库确认" />
+
     <div>
         <div>
             <span>本次入库总量: @(skuStockList.Count)</span>
         </div>
 
-        @if (skuStockList.Count > 0) {
+        @if (skuStockList.Count > 0)
+        {
             <Space Wrap>
-            @foreach (var tmp in skuStockList.GroupBy(x => x.SkuType))
-            {
-                <SpaceItem>
-                    <span>@(tmp.Key)</span><span>数量:</span><span>@(tmp.Count())</span>
-                </SpaceItem>
-            }
+             @foreach (var tmp in skuStockList.GroupBy(x => x.SkuType))
+                {
+                    <SpaceItem>
+                        <span>@(tmp.Key)</span><span>数量:</span><span>@(tmp.Count())</span>
+                    </SpaceItem>
+                }
             </Space>
         }
     </div>
+    @* 申请入库 *@
+    <WmsApp.FormTitle CurrentFormTitle=@requestFormTitle />
 
-    <WmsApp.FormTitle CurrentFormTitle="入库确认" />
+    @* 申请入库表单 *@
     <Form TModel=@StockAddModel Model=@stockModel
           OnFinish=OnFinish OnFinishFailed=OnFinishFailed>
+
+        <Row Align="top" Gutter=24>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
+            <FormItem Label="入库单号">
+                <Input @bind-Value="@context.StockInNo" />
+            </FormItem>
+            </Col>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=4>
+            <FormItem Label="类型">
+                <Select TItem=@Dict TItemValue=@string DataSource=@_stockInTypes
+                        DefaultActiveFirstOption=true EnableSearch=true
+                        LabelName="DictValue" ValueName="DictValue"
+                        @bind-Value="@context.StockInType">
+                </Select>
+            </FormItem>
+            </Col>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
+            <FormItem Label="仓库">
+                <Select TItem=@Warehouse TItemValue=@string DataSource=@_warehouses
+                        DefaultActiveFirstOption=true EnableSearch=true
+                        LabelName="WarehouseName" ValueName="WarehouseName"
+                        @bind-Value="@context.StockInWarehouse"
+                        Placeholder="选择一个仓库" />
+            </FormItem>
+            </Col>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
+            <FormItem Label="供应商">
+                <Select TItem=@Tenant TItemValue=@string DataSource=@_stockInSupplier
+                        DefaultActiveFirstOption=true EnableSearch=true
+                        LabelName="TenantName" ValueName="TenantName"
+                        @bind-Value="@context.Supplier">
+                </Select>
+            </FormItem>
+            </Col>
+            <Col Xs=24 Sm=12 Md=8 Lg=6 Xl=5>
+            <FormItem Label="合同号">
+                <Input @bind-Value="@context.ContractNo" />
+            </FormItem>
+            </Col>
+        </Row>
 
         <Row Align="top" Gutter=24>
             <Col Xs=24 Sm=12 Md=6 Lg=6 Xl=6>
@@ -212,23 +211,27 @@
         /// <summary>
         /// 入库单号
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "请输入单号")]
         public string StockInNo { get; set; }
 
-        [Required, Description("入库类型")]
+        [Required(ErrorMessage = "请选择入库类型"), Description("入库类型")]
         public string StockInType { get; set; }
-        [Required, Description("入库仓库")]
+
+        [Required(ErrorMessage = "请选择入库仓库"), Description("入库仓库")]
         public string StockInWarehouse { get; set; }
-        [Required, Description("供应商")]
+
+        [Required(ErrorMessage = "请输入供应商"), Description("供应商")]
         public string Supplier { get; set; }
-        [Required, Description("合同号")]
+
+        [Required(ErrorMessage = "请输入合同号"), Description("合同号")]
         public string ContractNo { get; set; }
+
         [JsonIgnore]
-        [Description("入库时间")]
-        public DateTime InTime { get; set; } = DateTime.Now;
+        [Required(ErrorMessage = "请输入入库时间"), Description("入库时间")]
+        public DateTime? InTime { get; set; } = DateTime.Now;
         public string StockInTime
         {
-            get { return InTime.ToString("yyyy-MM-dd hh:mm:ss"); }
+            get { return InTime?.ToString("yyyy-MM-dd hh:mm:ss"); }
         }
 
         [Required, Description("入库人员")]
@@ -236,8 +239,6 @@
         [Required, Description("审核人员")]
         public string Reviewer { get; set; }
 
-        // [Required]
-        // public bool IsSure { get; set; } = false;
     }
 
 }
